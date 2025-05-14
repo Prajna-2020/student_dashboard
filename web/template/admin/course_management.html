@@ -1,0 +1,862 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Admin Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  <style>
+    .profile-pic-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 18px;
+}
+/* For username text styling */
+.d-flex.align-items-center span {
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Sidebar Styling */
+.sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+          <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                
+          <ul class="navbar-nav mr-lg-2">
+            <!--<center>
+              <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+            </center>!-->
+            <li class="nav-item nav-search d-none d-lg-block">
+              <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown mr-1">
+             
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+                
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                      <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                  </div>
+                 
+                </a>
+         
+              </div>
+            </li>
+            
+            <li class="nav-item nav-profile dropdown">
+              <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                {% if user.profile_picture %}
+                  <img src="{{ user.profile_picture.url }}" alt="profile"/>
+                {% else %}
+                  <div class="profile-pic-placeholder">
+                    <i class="ti-user"></i>  <!-- Using Themify icon -->
+                  </div>
+                {% endif %}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item" href="{% url 'change_password' %}">
+                  <i class="ti-settings text-primary"></i>
+                  Change Password
+                </a>
+                <a class="dropdown-item" href="/signout/">
+                  <i class="ti-power-off text-primary"></i>
+                   Logout
+                </a>
+                <a class="dropdown-item" href="{% url 'edit_admin_profile' %}">
+                  <i class="ti-user text-primary"></i>
+                  Edit Profile
+              </a>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="ti-view-list"></span>
+          </button>
+        </div>
+      </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/home/">
+              <i class="ti-home menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_by_file' %}">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">Add User</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_department' %}">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Departments</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'manage_schemes' %}">
+              <i class="ti-stamp menu-icon"></i>
+              <span class="menu-title">Scheme</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'manage_courses_and_schemes' %}">
+              <i class="ti-ruler-pencil menu-icon"></i>
+              <span class="menu-title">Courses</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                <i class="ti-id-badge menu-icon"></i>
+                <span class="menu-title">Enrollment</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+                <ul class="nav flex-column sub-menu">
+                    <!-- Link for Form (Manual User Creation) -->
+                    <li class="nav-item">
+                      <a class="nav-link" href="{%url 'manage_enrollments' %}">Enroll</a>
+                    </li>
+                    <!-- Link for Add by File (Bulk User Creation) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_course_enrollments' %}">Course Scheme Mapping</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+              <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                  <!-- Link for Form (Manual User Creation) -->
+                  <li class="nav-item">
+                    <a class="nav-link" href="{%url 'bulk_upload_student' %}">Add Students</a>
+                  </li>
+                  <!-- Link for Add by File (Bulk User Creation) -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'list_students' %}">Manage Students</a>
+                  </li>
+              </ul>
+          </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <i class="ti-agenda menu-icon"></i>
+            <span class="menu-title">Faculty</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="auth">
+            <ul class="nav flex-column sub-menu">
+                <!-- Link for Form (Manual User Creation) -->
+                <li class="nav-item">
+                  <a class="nav-link" href="{%url 'bulk_upload_faculty' %}">Add Faculty</a>
+                </li>
+                <!-- Link for Add by File (Bulk User Creation) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_faculty' %}">Manage Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_calendar' %}">
+            <i class="ti-calendar menu-icon"></i>
+            <span class="menu-title">Admin Calendar</span>
+        </a>
+    </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="container-fluid">
+                        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
+                    <h1>Course and Scheme Management</h1>
+                    
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs" id="courseTabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="courses-tab" data-toggle="tab" href="#courses" role="tab">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="mappings-tab" data-toggle="tab" href="#mappings" role="tab">Scheme Mappings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="import-export-tab" data-toggle="tab" href="#import-export" role="tab">Import/Export</a>
+                        </li>
+                    </ul>
+                    
+                    <!-- Tab Content -->
+                    <div class="tab-content" id="courseTabsContent">
+                        <!-- Courses Tab -->
+                        <div class="tab-pane fade show active" id="courses" role="tabpanel">
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3>Add New Course</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" id="course-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="add_course" value="1">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="id_course_name">Course Name</label>
+                                                    <input type="text" class="form-control" name="course_name" id="id_course_name" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_course_code">Course Code</label>
+                                                    <input type="text" class="form-control" name="course_code" id="id_course_code" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_credits">Credits</label>
+                                                    <input type="number" class="form-control" name="credits" id="id_credits" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_semester">Semester</label>
+                                                    <select class="form-control" name="semester" id="id_semester" required>
+                                                        {% for value, name in semester_choices %}
+                                                            <option value="{{ value }}">{{ name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Departments</label>
+                                                    <div class="department-checkboxes">
+                                                        {% for dept in all_departments %}
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" name="departments" value="{{ dept.department_id }}" id="dept_{{ dept.department_id }}">
+                                                                <label class="form-check-label" for="dept_{{ dept.department_id }}">{{ dept.department_name }}</label>
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_internal_count">Internal Count</label>
+                                                    <input type="number" class="form-control" name="internal_count" id="id_internal_count" value="3">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_assignment_count">Assignment Count</label>
+                                                    <input type="number" class="form-control" name="assignment_count" id="id_assignment_count" value="2">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_quiz_count">Quiz Count</label>
+                                                    <input type="number" class="form-control" name="quiz_count" id="id_quiz_count" value="0">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_project_count">Project Count</label>
+                                                    <input type="number" class="form-control" name="project_count" id="id_project_count" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_internal_total_marks">Internal Total Marks</label>
+                                                    <input type="number" class="form-control" name="internal_total_marks" id="id_internal_total_marks" value="60">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_assignment_total_marks">Assignment Total Marks</label>
+                                                    <input type="number" class="form-control" name="assignment_total_marks" id="id_assignment_total_marks" value="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_quiz_total_marks">Quiz Total Marks</label>
+                                                    <input type="number" class="form-control" name="quiz_total_marks" id="id_quiz_total_marks" value="20">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="id_project_total_marks">Project Total Marks</label>
+                                                    <input type="number" class="form-control" name="project_total_marks" id="id_project_total_marks" value="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add Course</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3>Existing Courses</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Course Code</th>
+                                                    <th>Course Name</th>
+                                                    <th>Credits</th>
+                                                    <th>Semester</th>
+                                                    <th>Departments</th>
+                                                    <th>Internal</th>
+                                                    <th>Assignments</th>
+                                                    <th>Quizzes</th>
+                                                    <th>Projects</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for course in courses %}
+                                                <tr>
+                                                    <td>{{ course.course_code }}</td>
+                                                    <td>{{ course.course_name }}</td>
+                                                    <td>{{ course.credits }}</td>
+                                                    <td>Semester {{ course.semester }}</td>
+                                                    <td>
+                                                        {% for dept in course.department.all %}
+                                                            {{ dept.department_name }}{% if not forloop.last %}, {% endif %}
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ course.internal_count }} ({{ course.internal_total_marks }})</td>
+                                                    <td>{{ course.assignment_count }} ({{ course.assignment_total_marks }})</td>
+                                                    <td>{{ course.quiz_count }} ({{ course.quiz_total_marks }})</td>
+                                                    <td>{{ course.project_count }} ({{ course.project_total_marks }})</td>
+                                                    <td>
+                                                      <!-- Edit Button -->
+                                                      <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editCourseModal{{ course.course_id }}">
+                                                          Edit
+                                                      </button>
+                                                      <!-- Delete Button -->
+                                                      <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteCourse({{ course.course_id }})">
+                                                          Delete
+                                                      </button>
+                                                  </td>
+                                                </tr>
+                                                <!-- Edit Modal for Course -->
+                                                <div class="modal fade" id="editCourseModal{{ course.course_id }}" tabindex="-1" aria-hidden="true">
+                                                  <div class="modal-dialog">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                              <h5 class="modal-title">Edit Course: {{ course.course_name }}</h5>
+                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                            <form method="post" action="{% url 'update_course' course.course_id %}">
+                                                                {% csrf_token %}
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Course Name</label>
+                                                                            <input type="text" class="form-control" name="course_name" value="{{ course.course_name }}" required>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>Course Code</label>
+                                                                            <input type="text" class="form-control" name="course_code" value="{{ course.course_code }}" required>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>Credits</label>
+                                                                            <input type="number" class="form-control" name="credits" value="{{ course.credits }}" required>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label>Semester</label>
+                                                                            <input type="number" class="form-control" name="semester" value="{{ course.semester }}" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="form-group">
+                                                                            <label>Departments</label>
+                                                                            <div class="department-checkboxes">
+                                                                                {% for dept in all_departments %}
+                                                                                    <div class="form-check">
+                                                                                        <input class="form-check-input" type="checkbox" name="departments" 
+                                                                                               value="{{ dept.department_id }}" id="dept_{{ dept.department_id }}"
+                                                                                               {% if dept in course.department.all %}checked{% endif %}>
+                                                                                        <label class="form-check-label" for="dept_{{ dept.department_id }}">
+                                                                                            {{ dept.department_name }}
+                                                                                        </label>
+                                                                                    </div>
+                                                                                {% endfor %}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Internal Count</label>
+                                                                            <input type="number" class="form-control" name="internal_count" 
+                                                                                   value="{{ course.internal_count }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Assignment Count</label>
+                                                                            <input type="number" class="form-control" name="assignment_count" 
+                                                                                   value="{{ course.assignment_count }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Quiz Count</label>
+                                                                            <input type="number" class="form-control" name="quiz_count" 
+                                                                                   value="{{ course.quiz_count }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Project Count</label>
+                                                                            <input type="number" class="form-control" name="project_count" 
+                                                                                   value="{{ course.project_count }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="row">
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Internal Total Marks</label>
+                                                                            <input type="number" class="form-control" name="internal_total_marks" 
+                                                                                   value="{{ course.internal_total_marks }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Assignment Total Marks</label>
+                                                                            <input type="number" class="form-control" name="assignment_total_marks" 
+                                                                                   value="{{ course.assignment_total_marks }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Quiz Total Marks</label>
+                                                                            <input type="number" class="form-control" name="quiz_total_marks" 
+                                                                                   value="{{ course.quiz_total_marks }}">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-3">
+                                                                        <div class="form-group">
+                                                                            <label>Project Total Marks</label>
+                                                                            <input type="number" class="form-control" name="project_total_marks" 
+                                                                                   value="{{ course.project_total_marks }}">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="form-group text-right">
+                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                    <button type="submit" class="btn btn-primary">Update Course</button>
+                                                                </div>
+                                                            </form>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mappings Tab -->
+                        <div class="tab-pane fade" id="mappings" role="tabpanel">
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3>Add Course-Scheme Mapping</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form method="post" id="mapping-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="add_mapping" value="1">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="id_course">Course</label>
+                                                    <select class="form-control" name="course" id="id_course" required>
+                                                        <option value="">Select Course</option>
+                                                        {% for course in courses %}
+                                                            <option value="{{ course.course_id }}">{{ course.course_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="id_scheme">Scheme</label>
+                                                    <select class="form-control" name="scheme" id="id_scheme" required>
+                                                        <option value="">Select Scheme</option>
+                                                        {% for scheme in all_schemes %}
+                                                            <option value="{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="id_scheme_year">Scheme Year</label>
+                                                    <input type="number" class="form-control" name="scheme_year" id="id_scheme_year" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="id_internal_weightage">Internal Weightage</label>
+                                                    <input type="number" class="form-control" name="internal_weightage" id="id_internal_weightage" value="50" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="id_external_weightage">External Weightage</label>
+                                                    <input type="number" class="form-control" name="external_weightage" id="id_external_weightage" value="50" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3">Add Mapping</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h3>Existing Course-Scheme Mappings</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Course</th>
+                                                    <th>Scheme</th>
+                                                    <th>Year</th>
+                                                    <th>Weightage</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for cs in course_schemes %}
+                                                <tr>
+                                                    <td>{{ cs.course.course_name }} ( {{ cs.course.course_code }} )</td>
+                                                    <td>{{ cs.scheme.scheme_name }}</td>
+                                                    <td>{{ cs.scheme_year }}</td>
+                                                    <td>Internal: {{ cs.internal_weightage }}%, External: {{ cs.external_weightage }}%</td>
+                                                    <td>
+                                                      <!-- Edit Button -->
+                                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editMappingModal{{ cs.course_scheme_id }}">
+                                                           Edit
+                                                        </button>
+                                                  </td>
+                                                </tr>
+                                                <!-- In your edit modal for scheme mappings -->
+                                                    <div class="modal fade" id="editMappingModal{{ cs.course_scheme_id }}" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Edit Scheme Mapping: {{ cs.course.course_name }} - {{ cs.scheme.scheme_name }}</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form method="post" action="{% url 'update_scheme_mapping' cs.course_scheme_id %}">
+                                                                        {% csrf_token %}
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>Internal Weightage (%)</label>
+                                                                                    <input type="number" step="0.01" class="form-control" 
+                                                                                        name="internal_weightage" value="{{ cs.internal_weightage }}" required>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <div class="form-group">
+                                                                                    <label>External Weightage (%)</label>
+                                                                                    <input type="number" step="0.01" class="form-control" 
+                                                                                        name="external_weightage" value="{{ cs.external_weightage }}" required>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        <div class="form-group">
+                                                                            <label>Scheme Year</label>
+                                                                            <input type="number" class="form-control" 
+                                                                                name="scheme_year" value="{{ cs.scheme_year }}" required>
+                                                                        </div>
+                                                                        
+                                                                        <div class="form-group text-right">
+                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                                            <button type="submit" class="btn btn-primary">Update Mapping</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Import/Export Tab -->
+                        <div class="tab-pane fade" id="import-export" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card mt-3">
+                                        <div class="card-header">
+                                            <h3>Import Courses</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <form method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="import_csv" value="1">
+                                                <div class="form-group">
+                                                    <label for="id_scheme">Scheme</label>
+                                                    <select class="form-control" name="scheme" id="id_scheme" required>
+                                                        <option value="">Select Scheme</option>
+                                                        {% for scheme in all_schemes %}
+                                                            <option value="{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_department">Department</label>
+                                                    <select class="form-control" name="department" id="id_department" required>
+                                                        <option value="">Select Department</option>
+                                                        {% for dept in all_departments %}
+                                                            <option value="{{ dept.department_id }}">{{ dept.department_name }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="id_csv_file">CSV File</label>
+                                                    <input type="file" class="form-control-file" name="csv_file" id="id_csv_file" accept=".csv" required>
+                                                    <small class="form-text text-muted">
+                                                        Download the template first to ensure correct format.
+                                                    </small>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Import</button>
+                                                <a href="{% url 'download_course_template' %}" class="btn btn-secondary ml-2" download>Download Template</a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                  <div class="card mt-3">
+                                      <div class="card-header">
+                                          <h3>Export Courses</h3>
+                                      </div>
+                                      <div class="card-body">
+                                          <form method="post" action="{% url 'export_courses_csv' %}">
+                                              {% csrf_token %}
+                                              <div class="form-group">
+                                                  <label for="export_scheme">Scheme</label>
+                                                  <select class="form-control" name="scheme" id="export_scheme" required>
+                                                      <option value="">Select Scheme</option>
+                                                      {% for scheme in all_schemes %}
+                                                          <option value="{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</option>
+                                                      {% endfor %}
+                                                  </select>
+                                              </div>
+                                              <div class="form-group">
+                                                  <label for="export_department">Department</label>
+                                                  <select class="form-control" name="department" id="export_department" required>
+                                                      <option value="">Select Department</option>
+                                                      {% for dept in all_departments %}
+                                                          <option value="{{ dept.department_id }}">{{ dept.department_name }}</option>
+                                                      {% endfor %}
+                                                  </select>
+                                              </div>
+                                              <button type="submit" class="btn btn-success">Export to CSV</button>
+                                              
+                                          </form>
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+</body>
+        </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+        </div>
+      </footer>
+      <!-- partial -->
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{%static 'js/dashboard.js' %}"></script>
+  <!-- End custom js for this page-->
+  <!-- JavaScript for Delete Confirmation -->
+  <script>
+    // Course Delete Confirmation
+    function confirmDeleteCourse(courseId) {
+        if (confirm("Are you sure you want to delete this course?")) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{% url 'delete_course' 0 %}".replace("0", courseId);
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrfmiddlewaretoken';
+            csrfInput.value = csrfToken;
+            form.appendChild(csrfInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+    </script>
+</body>
+</html>

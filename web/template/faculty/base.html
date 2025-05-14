@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>AJIET Faculty Portal</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}" />
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %} " />
+
+    <!-- Custom CSS -->
+    <style>
+      body {
+        font-family: "Nunito", sans-serif;
+        background-color: #f8f9fa;
+      }
+      .navbar {
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+      }
+      .sidebar {
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .sidebar .nav-item .nav-link {
+        color: rgba(255, 255, 255, 0.8);
+        padding: 1rem;
+      }
+      .sidebar .nav-item .nav-link:hover {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      .sidebar .nav-item .nav-link i {
+        margin-right: 0.5rem;
+      }
+      .sidebar .nav-item.active .nav-link {
+        color: #fff;
+        font-weight: 700;
+      }
+      .content-wrapper {
+        padding: 1.5rem;
+      }
+      .card {
+        border: none;
+        border-radius: 0.35rem;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+      }
+      .dashboard-card {
+        transition: all 0.3s;
+      }
+      .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+  </head>
+
+  <body>
+    <div class="container-scroller">
+      <!-- Top Navbar -->
+      <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        <div
+          class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center"
+        >
+          <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+            <img
+              src="{% static 'images/ajiet_logo.png' %}"
+              style="width: 150px; height: auto"
+              alt="logo"
+            />
+          </a>
+        </div>
+        <div
+          class="navbar-menu-wrapper d-flex align-items-center justify-content-end"
+        >
+          <button
+            class="navbar-toggler navbar-toggler align-self-center"
+            type="button"
+            data-toggle="minimize"
+          >
+            <span class="ti-view-list"></span>
+          </button>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown mr-1">
+              <div
+                class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                aria-labelledby="messageDropdown"
+              >
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                    <img
+                      src="{% static 'images/face10.jpg' %}"
+                      alt="image"
+                      class="profile-pic"
+                    />
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link count-indicator dropdown-toggle"
+                id="notificationDropdown"
+                href="#"
+                data-toggle="dropdown"
+              >
+                <i class="ti-bell mx-0"></i>
+                <span class="count"></span>
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                aria-labelledby="notificationDropdown"
+              >
+                <p class="mb-0 font-weight-normal float-left dropdown-header">
+                  Notifications
+                </p>
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                    <div class="item-icon bg-success">
+                      <i class="ti-info-alt mx-0"></i>
+                    </div>
+                  </div>
+                  <div class="item-content">
+                    <h6 class="font-weight-normal">Application Error</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                      Just now
+                    </p>
+                  </div>
+                </a>
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                    <div class="item-icon bg-warning">
+                      <i class="ti-settings mx-0"></i>
+                    </div>
+                  </div>
+                  <div class="item-content">
+                    <h6 class="font-weight-normal">Settings</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                      Private message
+                    </p>
+                  </div>
+                </a>
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                    <div class="item-icon bg-info">
+                      <i class="ti-user mx-0"></i>
+                    </div>
+                  </div>
+                  <div class="item-content">
+                    <h6 class="font-weight-normal">New user registration</h6>
+                    <p class="font-weight-light small-text mb-0 text-muted">
+                      2 days ago
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li class="nav-item nav-profile dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                data-toggle="dropdown"
+                id="profileDropdown"
+              >
+                <span class="mr-2 d-none d-lg-inline text-gray-600"
+                  >{{ request.user.email }}</span
+                >
+                {% if request.user.faculty.profile_picture %}
+                <img
+                  src="{{ request.user.faculty.profile_picture.url }}"
+                  alt="Profile"
+                  class="rounded-circle"
+                  width="32"
+                />
+                {% else %}
+                <i class="ti-user"></i>
+                {% endif %}
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right navbar-dropdown"
+                aria-labelledby="profileDropdown"
+              >
+                <a class="dropdown-item" href="/profile/">
+                  <i class="ti-user text-primary"></i> Profile
+                </a>
+                <a class="dropdown-item" href="/signout/">
+                  <i class="ti-power-off text-primary"></i> Logout
+                </a>
+                <a
+                  class="dropdown-item"
+                  href="{% url 'faculty_change_password' %}"
+                >
+                  <i class="ti-settings text-primary"></i>
+                  Change Password
+                </a>
+              </div>
+            </li>
+          </ul>
+          <button
+            class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
+            type="button"
+            data-toggle="offcanvas"
+          >
+            <span class="ti-view-list"></span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Sidebar -->
+      <div class="container-fluid page-body-wrapper">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+                <i class="ti-shield menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/fac_course/">
+                <i class="ti-book menu-icon"></i>
+                <span class="menu-title">View Courses</span>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'faculty_list_students' %}">
+                <i class="ti-book menu-icon"></i>
+                <span class="menu-title">Students</span>
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home' %}">
+                <i class="ti-book menu-icon"></i>
+                <span class="menu-title">View Documentation</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-panel">
+          <div class="content-wrapper">{% block content %}{% endblock %}</div>
+
+          <!-- Footer -->
+          <footer class="footer">
+            <div
+              class="d-sm-flex justify-content-center justify-content-sm-between"
+            >
+              <span
+                class="text-muted text-center text-sm-left d-block d-sm-inline-block"
+              >
+                Copyright © 2023
+                <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>.
+                All rights reserved.
+              </span>
+              <span
+                class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"
+              >
+                Hand-crafted & made with
+                <i class="ti-heart text-danger ml-1"></i>
+              </span>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/template.js' %}"></script>
+    <!-- Custom Scripts -->
+    <script>
+      // Toggle sidebar
+      document
+        .querySelector('[data-toggle="minimize"]')
+        .addEventListener("click", function () {
+          document.body.classList.toggle("sidebar-icon-only");
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

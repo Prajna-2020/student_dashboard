@@ -1,0 +1,472 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Admin Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  <style>
+  .profile-pic-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f5f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 18px;
+  }
+  /* For username text styling */
+  .d-flex.align-items-center span {
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+    /* Sidebar Styling */
+    .sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(185, 184, 198, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+    </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        
+        <ul class="navbar-nav mr-lg-2">
+          <!--<center>
+            <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+          </center>!-->
+          <li class="nav-item nav-search d-none d-lg-block">
+            <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown mr-1">
+           
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                    <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                </div>
+               
+              </a>
+       
+            </div>
+          </li>
+          
+          <li class="nav-item nav-profile dropdown">
+            <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              {% if request.user.student.profile_picture %}
+              <img src="{{ request.user.student.profile_picture.url }}" alt="profile" class="profile-img"/>
+              {% else %}
+                <div class="profile-pic-placeholder">
+                  <i class="ti-user"></i>  <!-- Using Themify icon -->
+                </div>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a href="{% url 'student_change_password' %}" class="dropdown-item">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                 Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/home/">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+              <a href="{% url 'profile_details' %}" class="nav-link">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">View Profile</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'student_attendance' %}" class="nav-link">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Attendance Status</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_enrollments' %}">
+              <i class="ti-github menu-icon"></i>
+              <span class="menu-title">Enrollments</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'update_all_results' %}">
+              <i class="ti-bar-chart menu-icon"></i>
+              <span class="menu-title">Results</span>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'student_calendar' %}">
+              <i class="ti-calendar menu-icon"></i>
+              <span class="menu-title">Event Calendar</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_announcements' %}">
+                <i class="ti-bell menu-icon"></i>
+                <span class="menu-title">Announcements</span>
+            </a>
+        </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+               
+                
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                    <p class="card-title text-md-center text-xl-left">CGPA</p>
+                    <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                        <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ cgpa }}</h3>
+                        <i class="ti-book icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    </div>  
+                </div>
+            </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                  <div class="card-body">
+                      <p class="card-title text-md-center text-xl-left">SEM</p>
+                      <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                          
+                            <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ current_semester|default:"N/A" }}</h3>
+                          
+                          <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                      </div>  
+                  </div>
+              </div>
+          </div>
+          
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-title text-md-center text-xl-left">Credit Points</p>
+                    <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                        <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ total_credits|default:"N/A" }}</h3>
+                        <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 grid-margin stretch-card">
+          <div class="card">
+              <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Department</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                      <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">
+                          {{ department|default:"N/A" }}
+                      </h3>
+                      <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+              </div>
+          </div>
+      </div>
+          </div>
+                  <div class="row">
+                    <div class="col-12 grid-margin stretch-card" > 
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Your Performance</h4>
+                                {% if performance_available %}
+                                <div class="mt-4">
+                                    <canvas id="performanceChart" height="100"></canvas>
+                                </div>
+                                <div class="mt-3 text-center">
+                                    <p class="text-muted">Latest SGPA: <strong>{{ latest_sgpa|floatformat:2 }}</strong></p>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-info mt-3">
+                                    No semester results available yet
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  {% if performance_available %}
+                  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                  <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                      const ctx = document.getElementById('performanceChart').getContext('2d');
+                      const data = JSON.parse('{{ sgpa_data|escapejs }}');
+                      
+                      new Chart(ctx, {
+                          type: 'line',
+                          data: {
+                              labels: data.labels,
+                              datasets: [{
+                                  label: 'SGPA Trend',
+                                  data: data.data,
+                                  borderColor: 'rgba(75, 192, 192, 1)',
+                                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                  tension: 0.3,
+                                  fill: true
+                              }]
+                          },
+                          options: {
+                              responsive: true,
+                              scales: {
+                                  y: {
+                                      beginAtZero: false,
+                                      suggestedMin: Math.min(...data.data) - 0.5,
+                                      suggestedMax: Math.max(...data.data) + 0.5,
+                                      title: {
+                                          display: true,
+                                          text: 'SGPA'
+                                      }
+                                  },
+                                  x: {
+                                      title: {
+                                          display: true,
+                                          text: 'Semester'
+                                      }
+                                  }
+                              },
+                              plugins: {
+                                  tooltip: {
+                                      callbacks: {
+                                          label: function(context) {
+                                              return 'SGPA: ' + context.parsed.y.toFixed(2);
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      });
+                  });
+                  </script>
+                  {% endif %}
+                  
+                  <div class="row">
+                    <div class="col-md-12 grid-margin stretch-card">
+                        <div class="card position-relative">
+                            <div class="card-body">
+                                <p class="card-title">Attendance by Course (Semester {{ current_semester }})</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {% if attendance_available %}
+                                        <div class="chart-container" style="position: relative; height:300px;">
+                                            <canvas id="attendanceDoughnutChart"></canvas>
+                                        </div>
+                                        {% else %}
+                                        <p class="text-muted">No attendance data available</p>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if attendance_available %}
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Course</th>
+                                                        <th>Attendance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in attendance_details %}
+                                                    <tr>
+                                                        <td>{{ item.course }}</td>
+                                                        <td>
+                                                            <span class="badge" style="background-color: {{ item.color }}; color: white;">
+                                                                {{ item.percentage }}%
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if attendance_available %}
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const data = JSON.parse('{{ attendance_chart_data|escapejs }}');
+                    const ctx = document.getElementById('attendanceDoughnutChart').getContext('2d');
+                    
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                data: data.data,
+                                backgroundColor: data.colors,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `${context.label}: ${context.raw}%`;
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: `Total Courses: ${data.total_courses}`,
+                                    position: 'bottom'
+                                }
+                            },
+                            cutout: '60%'
+                        }
+                    });
+                });
+                </script>
+                {% endif %}
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{%static 'js/dashboard.js' %}"></script>
+  <!-- End custom js for this page-->
+</body>
+
+</html>
+
+
+</body>
+</html>

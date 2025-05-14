@@ -1,0 +1,319 @@
+{% extends 'faculty/base.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-12 grid-margin">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h4 class="font-weight-bold mb-0">STUDENT DETAILS</h4>
+        </div>
+        <div>
+          <a href="{% url 'faculty_dashboard' %}" class="btn btn-secondary">
+            <i class="ti-arrow-left mr-2"></i> Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Profile Section -->
+  <div class="row mb-4">
+    <div class="col-md-4 mb-4">
+      <div class="card dashboard-card h-100">
+        <div class="card-body text-center">
+          {% if student.profile_picture %}
+    <img src="{{ student.profile_picture.url }}" 
+         class="rounded-circle mb-3" width="150" height="150" alt="Profile">
+          {% else %}
+              <!-- Display a default profile picture or placeholder -->
+               <div class="profile-pic-placeholder" class="rounded-circle mb-3" width="150" height="150" alt="Default Profile">
+                  <i class="ti-user"></i>  <!-- Using Themify icon -->
+                </div>
+          {% endif %}
+          <h4 class="mb-1">{{ student.user.get_full_name }}</h4>
+          <p class="text-muted mb-2">{{ student.user.username }}</p>
+          <p class="text-muted">{{ student.department.department_name }}</p>
+          <div class="d-flex justify-content-center">
+            <span class="badge badge-primary mr-2">Sem {{ student.current_semester }}</span>
+            <span class="badge badge-info">{{ student.scheme.scheme_name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-8 mb-4">
+      <div class="card dashboard-card h-100">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Personal Information</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <h6>Email</h6>
+                <p class="text-muted">{{ student.user.email }}</p>
+              </div>
+              <div class="mb-3">
+                <h6>Phone Number</h6>
+                <p class="text-muted">{{ student.phone_number|default:"Not provided" }}</p>
+              </div>
+              <div class="mb-3">
+                <h6>Date of Birth</h6>
+                <p class="text-muted">{{ student.date_of_birth|date:"F j, Y"|default:"Not provided" }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <h6>Gender</h6>
+                <p class="text-muted">{{ student.gender|default:"Not provided" }}</p>
+              </div>
+              <div class="mb-3">
+                <h6>Address</h6>
+                <p class="text-muted">{{ student.address|default:"Not provided"|linebreaks }}</p>
+              </div>
+            </div>
+          </div>
+          
+          <hr>
+          
+          <h4 class="card-title mb-4">Guardian Information</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <h6>Guardian Name</h6>
+                <p class="text-muted">{{ student.guardian_name|default:"Not provided" }}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <h6>Guardian Contact</h6>
+                <p class="text-muted">{{ student.guardian_contact|default:"Not provided" }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Academic Performance -->
+  <div class="row mb-4">
+    <div class="col-md-12">
+      <div class="card dashboard-card">
+        <div class="card-header">
+          <h4 class="card-title mb-0">Academic Performance</h4>
+        </div>
+        <div class="card-body">
+          <ul class="nav nav-tabs" id="performanceTabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="attendance-tab" data-toggle="tab" href="#attendance" role="tab">
+                Attendance
+              </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="assessments-tab" data-toggle="tab" href="#assessments" role="tab">
+                    All Assessments
+                </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="Summary-tab" data-toggle="tab" href="#Summary" role="tab">
+                  Total Marks Summary
+              </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="sgpa-tab" data-toggle="tab" href="#sgpa" role="tab">
+                Your Performance
+            </a>
+        </li>
+          </ul>
+          
+          
+          <div class="tab-content mt-4" id="performanceTabsContent">
+            <div class="tab-pane fade" id="sgpa" role="tabpanel">
+              <div class="card mb-4">
+                  <div class="card-header">
+                      <h5 class="mb-0">Semester Performance</h5>
+                  </div>
+                  <div class="card-body">
+                      
+                      <hr>
+                      <h5 class="mb-3">Cumulative Performance</h5>
+                      <div class="d-flex justify-content-center align-items-center">
+                          <div class="display-4 text-primary mr-3">{{ cgpa }}</div>
+                          <div class="text-muted">CGPA</div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+            <!-- Attendance Tab -->
+            <div class="tab-pane fade show active" id="attendance" role="tabpanel">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Course</th>
+                      <th>Code</th>
+                      <th>Classes Attended</th>
+                      <th>Total Classes</th>
+                      <th>Attendance %</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for data in attendance_data %}
+                    <tr>
+                      <td>{{ data.course.course_name }}</td>
+                      <td>{{ data.course.course_code }}</td>
+                      <td>{{ data.present_classes }}</td>
+                      <td>{{ data.total_classes }}</td>
+                      <td>{{ data.attendance_percentage|floatformat:1 }}%</td>
+                      <td>
+                        <span class="badge {% if data.attendance_percentage >= 75 %}badge-success{% else %}badge-danger{% endif %}">
+                          {% if data.attendance_percentage >= 75 %}Good{% else %}Low{% endif %}
+                        </span>
+                      </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                      <td colspan="6" class="text-center text-muted">No attendance data available</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Marks Tab -->
+            <div class="tab-pane fade" id="assessments" role="tabpanel">
+                {% for assessment in assessment_data %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>{{ assessment.course.course_name }} ({{ assessment.course.course_code }})</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Internals -->
+                        <h6>Internal Marks</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Internal</th>
+                                        <th>Marks</th>
+                                        <th>Percentage</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for internal in assessment.internals %}
+                                    <tr>
+                                        <td>Internal {{ internal.number }}</td>
+                                        <td>{{ internal.marks }}/{{ internal.max_marks }}</td>
+                                        <td>{{ internal.percentage|floatformat:1 }}%</td>
+                                        <td>
+                                            <span class="badge badge-{% if internal.status == 'Good' %}success{% else %}danger{% endif %}">
+                                                {{ internal.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-muted">No internal marks recorded</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+            
+                       
+                        <!-- External Marks -->
+                        <h6 class="mt-4">External Marks</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td>External Exam</td>
+                                        <td>
+                                            {% if assessment.external %}
+                                                {{ assessment.external.marks }}/{{ assessment.external.max_marks }}
+                                            {% else %}
+                                                Not available
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if assessment.external %}
+                                                {{ assessment.external.percentage|floatformat:1 }}%
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if assessment.external %}
+                                            <span class="badge badge-{% if assessment.external.status == 'Good' %}success{% else %}danger{% endif %}">
+                                                {{ assessment.external.status }}
+                                            </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Within the Assessments tab panel -->
+<div class="tab-pane fade" id="Summary" role="tabpanel">
+  {% for assessment in assessment_data %}
+  <div class="card mb-4">
+      <div class="card-header">
+          <h5>{{ assessment.course.course_name }} ({{ assessment.course_code }})</h5>
+      </div>
+      <div class="card-body">
+          
+          <hr>
+          <div class="row">
+              <div class="col-md-12">
+                  <h5 class="text-center">Final Result</h5>
+                  <p class="text-center display-4 {% if assessment.is_passing %}text-success{% else %}text-danger{% endif %}">
+                      {{ assessment.final_total|floatformat:2 }}% - Grade {{ assessment.grade }}
+                  </p>
+
+              </div>
+          </div>
+      </div>
+  </div>
+  {% empty %}
+  <div class="alert alert-info">
+      No assessment data available for any courses.
+  </div>
+  {% endfor %}
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .dashboard-card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: none;
+  }
+  
+  .dashboard-card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  .nav-tabs .nav-link.active {
+    font-weight: 500;
+    border-bottom: 3px solid #4b7bec;
+  }
+  
+  .nav-tabs .nav-link {
+    color: #495057;
+    border: none;
+    padding: 10px 20px;
+  }
+</style>
+{% endblock %}

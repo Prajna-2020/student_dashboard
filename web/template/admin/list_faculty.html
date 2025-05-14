@@ -1,0 +1,472 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Admin Management</title>
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  <style>
+    .profile-pic-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 18px;
+}
+/* For username text styling */
+.d-flex.align-items-center span {
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Sidebar Styling */
+.sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  </style>
+  </head>
+<body>
+  <div class="container-scroller">
+    <!-- Include your navbar partial here -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+              
+        <ul class="navbar-nav mr-lg-2">
+          <!--<center>
+            <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+          </center>!-->
+          <li class="nav-item nav-search d-none d-lg-block">
+            <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown mr-1">
+           
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                    <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                </div>
+               
+              </a>
+       
+            </div>
+          </li>
+          
+          <li class="nav-item nav-profile dropdown">
+            <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="profile"/>
+              {% else %}
+                <div class="profile-pic-placeholder">
+                  <i class="ti-user"></i>  <!-- Using Themify icon -->
+                </div>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="{% url 'change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                 Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'edit_admin_profile' %}">
+                <i class="ti-user text-primary"></i>
+                Edit Profile
+            </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+    <!--partials-->
+    <div class="container-fluid page-body-wrapper">
+      <!-- Include your sidebar partial here -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/home/">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_by_file' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Add User</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_department' %}">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Departments</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'manage_schemes' %}">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Scheme</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'manage_courses_and_schemes' %}">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Courses</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                <i class="ti-user menu-icon"></i>
+                <span class="menu-title">Enrollment</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+                <ul class="nav flex-column sub-menu">
+                    <!-- Link for Form (Manual User Creation) -->
+                    <li class="nav-item">
+                      <a class="nav-link" href="{%url 'manage_enrollments' %}">Enroll</a>
+                    </li>
+                    <!-- Link for Add by File (Bulk User Creation) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_course_enrollments' %}">Course Scheme Mapping</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">Students</span>
+              <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                  <!-- Link for Form (Manual User Creation) -->
+                  <li class="nav-item">
+                    <a class="nav-link" href="{%url 'bulk_upload_student' %}">Add Students</a>
+                  </li>
+                  <!-- Link for Add by File (Bulk User Creation) -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'list_students' %}">Manage Students</a>
+                  </li>
+              </ul>
+          </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <i class="ti-user menu-icon"></i>
+            <span class="menu-title">Faculty</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="auth">
+            <ul class="nav flex-column sub-menu">
+                <!-- Link for Form (Manual User Creation) -->
+                <li class="nav-item">
+                  <a class="nav-link" href="{%url 'bulk_upload_faculty' %}">Add Faculty</a>
+                </li>
+                <!-- Link for Add by File (Bulk User Creation) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_faculty' %}">Manage Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="container">
+                    <h1>Faculty Management</h1>
+                    
+                    <!-- Filter Form -->
+                    <form method="GET" class="mb-4">
+                      <div class="form-group">
+                        <label for="department">Filter by Department:</label>
+                        <select name="department" id="department" class="form-control">
+                          <option value="">All Departments</option>
+                          {% for dept in departments %}
+                            <option value="{{ dept.department_id }}" {% if dept.department_id|stringformat:"s" == request.GET.department %}selected{% endif %}>
+                              {{ dept.department_name }}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Filter</button>
+                    </form>
+                    
+                    <!-- Faculty Table -->
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-hover">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th>Photo</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for faculty in faculties %}
+                          <tr>
+                            <td>
+                              {% if faculty.profile_picture %}
+                                <img src="{{ faculty.profile_picture.url }}" alt="Profile" class="img-thumbnail" width="50">
+                              {% else %}
+                                <img src="{% static 'images/default_profile.png' %}" alt="Default" class="img-thumbnail" width="50">
+                              {% endif %}
+                            </td>
+                            <td>{{ faculty.first_name }} {{ faculty.last_name }}</td>
+                            <td>{{ faculty.employee_position|default:"-" }}</td>
+                            <td>{{ faculty.department.department_name }}</td>
+                            <td>{{ faculty.email }}</td>
+                            <td>{{ faculty.phone_number|default:"-" }}</td>
+                            <td>
+                              <button class="btn btn-warning btn-sm edit-btn" 
+                                      data-faculty-id="{{ faculty.faculty_id }}"
+                                      data-toggle="modal" 
+                                      data-target="#editModal">
+                                Edit
+                              </button>
+                              <button class="btn btn-danger btn-sm delete-btn" 
+                                      data-faculty-id="{{ faculty.faculty_id }}"
+                                      data-toggle="modal" 
+                                      data-target="#deleteModal">
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                          {% empty %}
+                          <tr>
+                            <td colspan="7" class="text-center">No faculty members found</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Edit Faculty Modal -->
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Faculty</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="editModalBody">
+                <!-- Content will be loaded via AJAX -->
+                Loading...
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                Are you sure you want to delete this faculty member? This action cannot be undone.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" action="">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  
+  <script>
+    $(document).ready(function() {
+        // Edit Faculty Modal
+        $(document).on('click', '.edit-btn', function() {
+            const facultyId = $(this).data('faculty-id');
+            $('#editModal').modal('show');
+            
+            // Load form via AJAX
+            $.get(`/edit-faculty/${facultyId}/`, function(data) {
+                $('#editModalBody').html(data);
+            }).fail(function() {
+                $('#editModalBody').html('<div class="alert alert-danger">Error loading form</div>');
+            });
+        });
+    
+        // Handle form submission via AJAX
+        $(document).on('submit', '#facultyForm', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const formData = new FormData(form[0]);
+            const url = form.attr('action');
+            
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRFToken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#editModal').modal('hide');
+                        showAlert('success', response.message);
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        // Show form with errors
+                        if (response.form_html) {
+                            $('#editModalBody').html(response.form_html);
+                        }
+                        // Display error messages
+                        if (response.errors) {
+                            const errors = JSON.parse(response.errors);
+                            for (const field in errors) {
+                                const errorMessage = errors[field][0].message;
+                                $(`#${field}`).addClass('is-invalid');
+                                $(`#${field}`).after(`<div class="invalid-feedback">${errorMessage}</div>`);
+                            }
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    $('#editModalBody').prepend('<div class="alert alert-danger">Error submitting form</div>');
+                }
+            });
+        });
+    
+        // Helper function to show alerts
+        function showAlert(type, message) {
+            const alert = `<div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`;
+            $('.content-wrapper').prepend(alert);
+            setTimeout(() => $('.alert').alert('close'), 3000);
+        }
+    
+        // Clear validation errors when modal is closed
+        $('#editModal').on('hidden.bs.modal', function() {
+            $('.is-invalid').removeClass('is-invalid');
+            $('.invalid-feedback').remove();
+        });
+    });
+    </script>
+
+  <script>
+    // Delete Faculty Modal
+    $(document).on('click', '.delete-btn', function() {
+      const facultyId = $(this).data('faculty-id');
+      $('#deleteForm').attr('action', `/delete-faculty/${facultyId}/`);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Mark Attendance - AJIET Faculty Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %} "/>
+  
+  <style>
+    /* Custom CSS for attendance page */
+    .attendance-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+    
+    .header-title {
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .attendance-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    
+    .attendance-table th {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 15px;
+      text-align: left;
+      font-weight: 600;
+    }
+    
+    .attendance-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      vertical-align: middle;
+    }
+    
+    .attendance-table tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .attendance-radio {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .status-present {
+      background-color: #28a745;
+      color: white;
+    }
+    
+    .status-absent {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .back-btn {
+      padding: 12px 25px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
+    
+    .submit-btn {
+      padding: 12px 25px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .submit-btn:hover {
+      background-color: #0069d9;
+    }
+    
+    .btn-icon {
+      margin-right: 8px;
+    }
+    
+    .date-selector {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .date-selector label {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+    
+    .date-selector input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .search-box {
+      margin-bottom: 20px;
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 300px;
+    }
+    
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 20px;
+    }
+    
+    .page-btn {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .page-btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+  </style>
+</head>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="csv-upload">
+    <input type="file" name="csv_file" accept=".csv" required>
+    <button type="submit" class="btn btn-primary">
+      <i class="ti-upload"></i> Upload CSV
+    </button>
+    <a href="{% static 'samples/attendance_sample.csv' %}" download class="btn btn-link">
+      Download Sample CSV
+    </a>
+  </div>
+</form>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 150px; height: auto;" alt="logo"/>
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 280px; height: auto;" alt="logo"/>
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'D:/New/student_portal/web/static/images/face10.png' %}" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="/profile/">
+                  <i class="ti-user text-primary"></i>
+                  Profile
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'faculty_change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/fac_course/">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Courses</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_list_students' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                
+                <div>
+                  <h4 class="font-weight-bold mb-0">Mark Attendance - {{ course_name }}</h4>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <a href="{% url 'faculty_dashboard' %}" class="btn btn-light mb-3">
+                      <i class="ti-arrow-left"></i> Back to Dashboard
+                    </a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-4">
+            <div class="card-header">
+                <h5>Upload Attendance via CSV</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'upload_attendance_csv' course_name=course_name %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="attendance_date">Attendance Date:</label>
+                        <input type="date" name="attendance_date" id="attendance_date" 
+                               value="{{ today|date:'Y-m-d' }}" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="csv_file">CSV File:</label>
+                        <input type="file" name="csv_file" id="csv_file" accept=".csv" class="form-control-file" required>
+                        <small class="form-text text-muted">
+                            File must contain columns: usn, status (Present/Absent)
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti-upload"></i> Upload CSV
+                    </button>
+                    <a href="{% url 'download_attendance_template' course_name=course_name %}" 
+                       class="btn btn-secondary">
+                        <i class="ti-download"></i> Download Template
+                    </a>
+                </form>
+            </div>
+        </div>
+          
+          <!-- Attendance Content -->
+          <!-- <div class="row">
+          <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <h4 class="card-title">Recent Attendance</h4>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Course</th>
+                        <th>Date</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for record in recent_attendance %}
+                      <tr>
+                        <td>{{ record.course.course_name }}</td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.present_count }}</td>
+                        <td>{{ record.absent_count }}</td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <td colspan="4" class="text-center">No attendance records found</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <h4 class="card-title">Recent Results</h4>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Course</th>
+                        <th>Exam</th>
+                        <th>Average</th>
+                        <th>Highest</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for result in recent_results %}
+                      <tr>
+                        <td>{{ result.course__course_name }}</td>
+                        <td>Internal {{ result.internal_number }}</td>
+                        <td>{{ result.average_marks|floatformat:2 }}</td>
+                        <td>{{ result.highest_marks|floatformat:2 }}</td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <td colspan="4" class="text-center">No result records found</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>-->
+        <!-- attendance.html -->
+<!-- Add this section below your existing form -->
+{% if show_csv %}
+<div class="csv-preview mt-4">
+  <h4>CSV Preview</h4>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+      <tr>
+        <th>USN</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in csv_data %}
+      <tr>
+        <td>{{ row.usn }}</td>
+        <td>{{ row.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <form method="post" action="{% url 'confirm_attendance' course_name=course_name %}">
+    {% csrf_token %}
+    <input type="hidden" name="attendance_date" value="{{ attendance_date }}">
+    {% for row in csv_data %}
+    <input type="hidden" name="usn_{{ forloop.counter }}" value="{{ row.usn }}">
+    <input type="hidden" name="status_{{ forloop.counter }}" value="{{ row.status }}">
+    {% endfor %}
+    <button type="submit" class="btn btn-success">
+      <i class="ti-check"></i> Confirm & Save
+    </button>
+  </form>
+</div>
+{% endif %}
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <!-- endinject -->
+  
+  <script>
+    // Update status badges when attendance is changed
+    function updateStatus(radio) {
+      const row = radio.closest('tr');
+      const statusBadge = row.querySelector('.status-badge');
+      
+      if (radio.value === 'present') {
+        statusBadge.className = 'status-badge status-present';
+        statusBadge.textContent = 'Present';
+      } else {
+        statusBadge.className = 'status-badge status-absent';
+        statusBadge.textContent = 'Absent';
+      }
+    }
+
+    // Search functionality
+    document.querySelector('.search-box').addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('.attendance-table tbody tr');
+      
+      rows.forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const usn = row.cells[1].textContent.toLowerCase();
+        if (name.includes(searchTerm) || usn.includes(searchTerm)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+
+    function submitAttendance() {
+      const attendanceDate = document.getElementById('attendance-date').value;
+      const attendanceRecords = [];
+      
+      document.querySelectorAll('.attendance-table tbody tr').forEach(row => {
+        if (row.style.display !== 'none') {
+          const studentId = row.querySelector('input[type="radio"]').name.split('_')[1];
+          const isPresent = row.querySelector('input[value="present"]:checked') !== null;
+          
+          attendanceRecords.push({
+            student_id: studentId,
+            present: isPresent
+          });
+        }
+      });
+      
+      alert(`Attendance for ${attendanceDate} submitted for ${attendanceRecords.length} students!`);
+      
+      // Actual submission code would go here
+    }
+  </script>
+</body>
+</html>

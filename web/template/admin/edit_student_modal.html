@@ -1,0 +1,167 @@
+{% load static %}
+<form id="studentForm" method="POST" action="{% url 'edit_student' student.student_id %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <div class="row">
+    <!-- Personal Details -->
+    <div class="col-md-6">
+      <h4>Personal Details</h4>
+      <div class="form-group">
+        <label>Profile Picture</label>
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="profile_picture" name="profile_picture">
+          <label class="custom-file-label" for="profile_picture">
+            {% if student.profile_picture %}
+              Current: {{ student.profile_picture.name|slice:"17:" }}
+            {% else %}
+              Choose file
+            {% endif %}
+          </label>
+        </div>
+        {% if student.profile_picture %}
+          <img src="{{ student.profile_picture.url }}" alt="Current Profile" class="img-thumbnail mt-2" width="100">
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ student.first_name }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ student.last_name }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ student.email }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ student.phone_number|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="date_of_birth">Date of Birth</label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth|date:'Y-m-d' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select class="form-control" id="gender" name="gender">
+          <option value="">Select Gender</option>
+          <option value="Male" {% if student.gender == 'Male' %}selected{% endif %}>Male</option>
+          <option value="Female" {% if student.gender == 'Female' %}selected{% endif %}>Female</option>
+          <option value="Other" {% if student.gender == 'Other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Academic Details -->
+    <div class="col-md-6">
+      <h4>Academic Details</h4>
+      <div class="form-group">
+        <label for="usn">USN</label>
+        <input type="text" class="form-control" id="usn" name="usn" value="{{ student.usn|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select class="form-control" id="department" name="department" required>
+          {% for dept in departments %}
+            <option value="{{ dept.department_id }}" {% if dept.department_id == student.department.department_id %}selected{% endif %}>
+              {{ dept.department_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="current_semester">Current Semester</label>
+        <input type="number" class="form-control" id="current_semester" name="current_semester" value="{{ student.current_semester }}" min="1" max="8">
+      </div>
+      
+      <div class="form-group">
+        <label for="admission_number">Admission Number</label>
+        <input type="text" class="form-control" id="admission_number" name="admission_number" value="{{ student.admission_number|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="scheme">Scheme</label>
+        <select class="form-control" id="scheme" name="scheme">
+          <option value="">Select Scheme</option>
+          {% for scheme in schemes %}
+            <option value="{{ scheme.scheme_id }}" {% if student.scheme and scheme.scheme_id == student.scheme.scheme_id %}selected{% endif %}>
+              {{ scheme.scheme_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <h4 class="mt-4">Guardian Details</h4>
+      <div class="form-group">
+        <label for="guardian_name">Guardian Name</label>
+        <input type="text" class="form-control" id="guardian_name" name="guardian_name" value="{{ student.guardian_name|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="guardian_contact">Guardian Contact</label>
+        <input type="text" class="form-control" id="guardian_contact" name="guardian_contact" value="{{ student.guardian_contact|default:'' }}">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Address Details -->
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <h4>Address Details</h4>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea class="form-control" id="address" name="address" rows="3">{{ student.address|default:'' }}</textarea>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Parent Details -->
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <h4>Father Details</h4>
+      <div class="form-group">
+        <label for="father_name">Father's Name</label>
+        <input type="text" class="form-control" id="father_name" name="father_name" value="{{ student.father_name|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="father_contact">Father's Contact</label>
+        <input type="text" class="form-control" id="father_contact" name="father_contact" value="{{ student.father_contact|default:'' }}">
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <h4>Mother Details</h4>
+      <div class="form-group">
+        <label for="mother_name">Mother's Name</label>
+        <input type="text" class="form-control" id="mother_name" name="mother_name" value="{{ student.mother_name|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="mother_contact">Mother's Contact</label>
+        <input type="text" class="form-control" id="mother_contact" name="mother_contact" value="{{ student.mother_contact|default:'' }}">
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </div>
+</form>
+
+<script>
+  // Update file input label
+  $('.custom-file-input').on('change', function() {
+    let fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+  });
+</script>

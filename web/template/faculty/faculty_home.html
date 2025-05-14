@@ -1,0 +1,518 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Faculty Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %} "/>
+  
+  <style>
+    /* Enhanced CSS for course cards */
+    .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f1f4f7;
+}
+
+.thead-dark th {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  padding: 12px 15px;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+    .course-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .course-card {
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-card-header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .course-card-body {
+      padding: 20px;
+    }
+
+    .course-card h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .course-card a {
+      display: block;
+      text-align: center;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .attendance-link {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .attendance-link:hover {
+      background-color: #27ae60;
+    }
+
+    .results-link {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .results-link:hover {
+      background-color: #2980b9;
+    }
+
+    /* Enhanced dashboard cards */
+    .dashboard-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Improved tables */
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table th {
+      background-color: #3498db;
+      color: white;
+      border: none;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    /* To-do list improvements */
+    .todo-list-custom li {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.3s;
+    }
+
+    .todo-list-custom li:hover {
+      background-color: #f8f9fa;
+    }
+
+    /* Header improvements */
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sidebar improvements */
+    .sidebar {
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    /* Search results styling */
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .stat-header {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #2c3e50;
+    }
+    .attendance-table {
+      width: 100%;
+      margin-top: 15px;
+      border-collapse: collapse;
+    }
+    .attendance-table td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .result-progress {
+      height: 20px;
+      margin: 10px 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      display: inline-block;
+      height: 100%;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+      line-height: 20px;
+    }
+    .bg-success {
+      background-color: #28a745;
+    }
+    .bg-danger {
+      background-color: #dc3545;
+    }
+    .alert {
+      padding: 10px 15px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="container-scroller">
+    
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 150px; height: auto;" alt="logo"/>
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 280px; height: auto;" alt="logo"/>
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          <li class="nav-item nav-search d-none d-lg-block">
+            <div class="input-group">
+              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+                <span class="input-group-text" id="search">
+                  <i class="ti-search"></i>
+                </span>
+              </div>
+              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown mr-1">
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <img src="{% static 'images/ajiet.jpg' %}" alt="image" class="profile-pic">
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="ti-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-success">
+                    <i class="ti-info-alt mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-warning">
+                    <i class="ti-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-info">
+                    <i class="ti-user mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'images/ajiet.jpg' %}" alt="Profile" class="rounded-circle" width="150">
+            </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item" href="/profile/">
+                    <i class="ti-user text-primary"></i>
+                    Profile
+                </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+    
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/fac_course/">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Courses</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_list_students' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="font-weight-bold mb-0">FACULTY PORTAL</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+             
+          
+          
+          <!-- Faculty Dashboard Cards -->
+          <!-- Faculty Dashboard Cards -->
+
+        <div class="row">
+          {% csrf_token %}
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">User Id</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ request.user }}</h4>
+                  <i class="ti-write icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">Faculty Name</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ request.user.get_full_name }}</h4>
+                  <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">Department</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ request.user.faculty.department.department_name }}</h4>
+                  <i class="ti-bookmark icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card dashboard-card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">Position</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{ request.user.faculty.employee_position }}</h4>
+                  <i class="ti-alert icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+              </div>
+            </div>
+            
+          </div>
+          
+          
+          
+          
+         <!-- Result Statistics -->
+         
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-12 grid-margin">
+              <div class="card dashboard-card">
+                  <div class="card-body">
+                    
+                      <h4 class="card-title">Quick Actions</h4>
+                      <div class="d-flex flex-wrap justify-content-around">
+                        <a href="/fac_course/" class="btn btn-primary btn-rounded m-2">
+                            <i class="ti-book mr-2"></i> View Profile
+                        </a>
+                        <a href="{% url 'course_actions' 'attendance' %}" class="btn btn-success btn-rounded m-2">
+                            <i class="ti-check-box mr-2"></i> Mark Attendance
+                        </a>
+                        <a href="{% url 'course_actions' 'results' %}" class="btn btn-info btn-rounded m-2">
+                            <i class="ti-clipboard mr-2"></i> Enter Results
+                        </a>
+                        <a href="{% url 'post_announcement' %}" class="btn btn-warning btn-rounded m-2">
+                            <i class="ti-announcement mr-2"></i> Post Announcement
+                        </a>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+    </div>
+    
+  </div>
+  
+</div>
+          
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this-->
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{%static 'js/dashboard.js' %}"></script>
+  
+  <!-- End custom js for this page-->
+ <!-- Existing scripts -->
+ <!-- Add Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>

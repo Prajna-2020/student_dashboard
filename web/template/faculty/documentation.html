@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Student Portal Dashboard</title>
+  <link rel="stylesheet" href="../vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="../vendors/base/vendor.bundle.base.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="shortcut icon" href="../images/favicon.png" />
+  <style>
+    body {
+      background-color: #e8e9ec;
+      font-family: Arial, sans-serif;
+    }
+
+    .home-button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .home-button:hover {
+      background-color: #45a049;
+    }
+
+    .text-primary {
+      color: #2b7de9 !important;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .documentation {
+      padding: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      font-weight: bold;
+    }
+
+    .alert {
+      display: flex;
+      align-items: center;
+    }
+
+    .alert i {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="main-panel w-100 documentation">
+        <div class="content-wrapper">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12 doc-header">
+                <button class="home-button" onclick="window.location.href='/dashboard/'">Back to home</button>
+                <h1 class="text-primary mt-4">Documentation</h1>
+              </div>
+            </div>
+            <div class="row doc-content">
+              <div class="col-12 col-md-10 offset-md-1">
+                <div class="col-12 grid-margin" id="doc-intro">
+                  <div class="card">
+                    <div class="card-body">
+                      <h3>Introduction</h3>
+                      <p>A **Student Portal** built using **Django** is a web-based application that enables students to efficiently manage their academic activities in a centralized system. Leveraging Django’s robust framework, the portal provides secure authentication, user-friendly interfaces, and seamless integration of essential features such as course registration, assignment submissions, exam schedules, and grade tracking. With Django’s powerful ORM (Object-Relational Mapping), the system efficiently handles database operations, ensuring smooth access to student records and academic data. Additionally, the portal supports role-based access control, allowing students, teachers, and administrators to interact with relevant modules. By utilizing Django’s scalability and security features, the Student Portal enhances communication, automates administrative tasks, and provides a structured digital environment for academic management.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 grid-margin" id="doc-started">
+                  <div class="card">
+                    <div class="card-body">
+                      <h3>Getting started</h3>
+                      <p>You can directly use the compiled and ready-to-use the version of the template. But in case you plan to customize the template extensively the template allows you to do so.
+
+                        Within the download you'll find the following directories and files, logically grouping common assets and providing both compiled and minified variations:</p>
+                      <pre>
+student_portal/
+│── myworld/
+│── web/
+│── static/
+│   ├── css/
+│   ├── fonts/
+│   ├── images/
+│   ├── js/
+│   ├── scss/
+│── template/
+│── web/
+│── webapp/
+│── workshop_images/
+│── manage.py</pre>
+<div class="alert alert-success mt-4 d-flex align-items-center" role="alert">
+  <i class="ti-info-alt mr-4"></i>
+  <p>We have set up the necessary project structure for you. If you need to modify dependencies or configure additional settings, you can update the <code>requirements.txt</code> file accordingly.</p>
+</div>
+<hr class="mt-5">
+<h4 class="mt-4">Installation</h4>
+<p class="mb-0">
+  You need to install package files/dependencies for this project to run. To do this, you must have <span class="font-weight-bold">Python and pip</span> installed on your computer.
+</p>
+<p class="mb-0">You can download and install Python from <a href="https://www.python.org/downloads/">here</a>. Pip is included with Python, so no separate installation is needed.</p>
+<p>
+  Once Python is installed, navigate to the root folder of the project and run the following command to create a virtual environment:
+</p>
+<pre class="shell-mode">
+python -m venv venv
+</pre>
+<p class="mt-4">
+  After creating the virtual environment, activate it using the following command:
+</p>
+<p class="mt-2"><strong>For Windows:</strong></p>
+<pre class="shell-mode">
+venv\Scripts\activate
+</pre>
+<p class="mt-2"><strong>For macOS/Linux:</strong></p>
+<pre class="shell-mode">
+source venv/bin/activate
+</pre>
+<p class="mt-4">
+  Next, install the required dependencies using:
+</p>
+<pre class="shell-mode">
+pip install -r requirements.txt
+</pre>
+<p class="mt-4">
+  This will install all necessary packages, including Django and other dependencies.
+</p>
+<p class="mt-2">
+  Now, apply the database migrations by running:
+</p>
+<pre class="shell-mode">
+python manage.py migrate
+</pre>
+<p class="mt-4">
+  Once the migrations are complete, you can create a superuser for the Django admin panel (optional but recommended):
+</p>
+<pre class="shell-mode">
+python manage.py createsuperuser
+</pre>
+<p class="mt-4">
+  Finally, to start the development server, use the command:
+</p>
+<pre class="shell-mode">
+python manage.py runserver
+</pre>
+<p class="mt-4">
+  This will start the Django development server. Open your browser and visit <a href="http://127.0.0.1:8000/" target="_blank">http://127.0.0.1:8000/</a> to access the Student Portal.
+</p>
+<div class="alert alert-warning mt-4" role="alert">
+  <i class="ti-info-alt-outline"></i> Make sure to run all commands from the project's root directory where <code>manage.py</code> is located.
+</div>
+
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted">Copyright © 2018 Templatewatch</span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

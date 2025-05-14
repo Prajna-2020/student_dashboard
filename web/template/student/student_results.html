@@ -1,0 +1,814 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AJIET Student Portal - Results</title>
+    
+    <!-- Combined CSS -->
+    <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="shortcut icon" href="{% static 'images/ajiet_logo.png' %}"/>
+    
+    <style>
+       .profile-pic-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f5f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 18px;
+  }
+  /* For username text styling */
+  .d-flex.align-items-center span {
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+    /* Sidebar Styling */
+    .sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    /* highligiting in which it is  */
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: rgb(36, 34, 34) !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+        
+        /* Results page specific styles */
+        .semester-header {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            border-left: 5px solid #007bff;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .semester-header:hover {
+            background-color: #e9ecef;
+        }
+        
+        .semester-content {
+            padding: 0 10px;
+            margin-bottom: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        .course-card {
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #007bff;
+        }
+        
+        .course-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .badge-credits {
+            background-color: #6c757d;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        .badge-sem {
+            background-color: #28a745;
+        }
+        
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .rotate-icon {
+            transform: rotate(180deg);
+        }
+        
+        .course-count {
+            font-size: 0.9rem;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50px;
+            padding: 2px 8px;
+        }
+        
+        .btn-view-results {
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            padding: 5px 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view-results:hover {
+            background-color: #0069d9;
+            color: white;
+        }
+        
+        .modal-header {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .internal-marks-table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        
+        .internal-marks-table th, 
+        .internal-marks-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .internal-marks-table th {
+            background-color: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .internal-marks-table tr:last-child td {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+        
+        .marks-summary {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .marks-summary h5 {
+            margin-bottom: 15px;
+        }
+        
+        .marks-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            border-bottom: 1px dashed #dee2e6;
+        }
+        
+        .marks-summary-label {
+            font-weight: 600;
+        }
+        
+        .component-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 15px;
+        }
+        
+        .component-section:last-child {
+            border-bottom: none;
+        }
+        
+        .component-heading {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .content-wrapper {
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-scroller">
+        <!-- Navigation from admin template -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+              <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+              <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+              <ul class="navbar-nav mr-lg-2">
+                <li class="nav-item nav-search d-none d-lg-block">
+                  <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+                </li>
+              </ul>
+              <ul class="navbar-nav navbar-nav-right">
+                <li class="nav-item nav-profile dropdown">
+                  <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+                  <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                    {% if request.user.student.profile_picture %}
+                    <img src="{{ request.user.student.profile_picture.url }}" alt="profile" class="profile-img"/>
+                    {% else %}
+                      <div class="profile-pic-placeholder">
+                        <i class="ti-user"></i>
+                      </div>
+                    {% endif %}
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                    <a href="{% url 'student_change_password' %}" class="dropdown-item">
+                      <i class="ti-settings text-primary"></i>
+                      Change Password
+                    </a>
+                    <a class="dropdown-item" href="/signout/">
+                      <i class="ti-power-off text-primary"></i>
+                      Logout
+                    </a>
+                  </div>
+                </li>
+              </ul>
+              <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+                <span class="ti-view-list"></span>
+              </button>
+            </div>
+          </nav>
+        
+        <!-- Sidebar from admin template -->
+        <div class="container-fluid page-body-wrapper">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/">
+                            <i class="ti-shield menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile_details' %}" class="nav-link">
+                            <i class="ti-user menu-icon"></i>
+                            <span class="menu-title">View Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'student_attendance' %}" class="nav-link">
+                            <i class="ti-write menu-icon"></i>
+                            <span class="menu-title">Attendance Status</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_enrollments' %}">
+                            <i class="ti-book menu-icon"></i>
+                            <span class="menu-title">Enrollments</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'update_all_results' %}">
+                            <i class="ti-bar-chart menu-icon"></i>
+                            <span class="menu-title">Results</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'student_calendar' %}">
+                          <i class="ti-calendar menu-icon"></i>
+                          <span class="menu-title">Event Calendar</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'student_announcements' %}">
+                            <i class="ti-bell menu-icon"></i>
+                            <span class="menu-title">Announcements</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <!-- Main content from results template -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h2 class="h4 mb-4">My Course Results</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-lg-12">
+                            {% if enrollments_by_sem %}
+                                {% for semester, courses in enrollments_by_sem.items %}
+                                    <div class="semester-header" onclick="toggleSemester({{ semester }})">
+                                        <div>
+                                            <i class="fas fa-book-open mr-2"></i>
+                                            Semester {{ semester }}
+                                            <span class="course-count ml-2">{{ courses|length }} courses</span>
+                                        </div>
+                                        <i class="fas fa-chevron-down chevron-icon" id="chevron-{{ semester }}"></i>
+                                    </div>
+                                    
+                                    <div class="semester-content" id="semester-{{ semester }}-content">
+                                        <div class="row">
+                                            {% for enrollment in courses %}
+                                                <div class="col-lg-6 mb-3">
+                                                    <div class="course-card card">
+                                                        <div class="card-header">
+                                                            {{ enrollment.course.course_name }}
+                                                            <span class="badge badge-credits float-right">{{ enrollment.course.credits }} Credits</span>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="mb-3">
+                                                                <strong>Course Code:</strong> {{ enrollment.course.course_code }}
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <strong>Faculty:</strong> {{ enrollment.faculty.user.get_full_name|default:"Not Assigned" }}
+                                                            </div>
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="badge badge-sem">Semester {{ enrollment.course.semester }}</span>
+                                                                <button type="button" class="btn btn-view-results" data-toggle="modal" data-target="#resultModal{{ enrollment.enrollment_id }}">
+                                                                    <i class="fas fa-poll mr-1"></i> View Results
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="alert alert-info">
+                                    You are not enrolled in any courses.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer from admin template -->
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Result Modals - one for each course -->
+    {% if enrollments_by_sem %}
+        {% for semester, courses in enrollments_by_sem.items %}
+            {% for enrollment in courses %}
+                <div class="modal fade" id="resultModal{{ enrollment.enrollment_id }}" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel{{ enrollment.enrollment_id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resultModalLabel{{ enrollment.enrollment_id }}">
+                                    {{ enrollment.course.course_name }} ({{ enrollment.course.course_code }}) - Results
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Internal Assessment Section -->
+                                {% if enrollment.internal_marks %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">Internal Assessment</h5>
+                                        <table class="internal-marks-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Assessment</th>
+                                                    <th>Max Marks</th>
+                                                    <th>Marks Obtained</th>
+                                                    <th>Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for internal in enrollment.internal_marks %}
+                                                    <tr>
+                                                        <td>IA Test {{ internal.internal_number }}</td>
+                                                        <td>{{ internal.max_marks }}</td>
+                                                        <td>{{ internal.marks }}</td>
+                                                        <td>
+                                                            {% if internal.max_marks > 0 %}
+                                                                {{ internal.marks|floatformat:2|default:0 }}</span>
+                                                            {% else %}
+                                                                N/A
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td><strong>Total Internal</strong></td>
+                                                    <td><strong>{{ enrollment.component_marks.internal.max }}</strong></td>
+                                                    <td><strong>{{ enrollment.component_marks.internal.obtained }}</strong></td>
+                                                    <td><strong>
+                                                        {% if enrollment.component_marks.internal.max > 0 %}
+                                                            {{ enrollment.component_marks.internal.obtained|floatformat:2|default:0 }}%
+                                                        {% else %}
+                                                            N/A
+                                                        {% endif %}
+                                                    </strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="text-right">
+                                            <span class="badge badge-info">Scaled to {{ enrollment.component_marks.internal.allocated }} marks: {{ enrollment.component_marks.internal.scaled }}</span>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">Internal Assessment</h5>
+                                        <div class="no-results">No internal assessment marks available</div>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Assignments Section -->
+                                {% if enrollment.assignments %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">Assignments</h5>
+                                        <table class="internal-marks-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Assignment</th>
+                                                    <th>Max Marks</th>
+                                                    <th>Marks Obtained</th>
+                                                    <th>Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for assignment in enrollment.assignments %}
+                                                    <tr>
+                                                        <td>Assignment {{ assignment.assignment_number }}</td>
+                                                        <td>{{ assignment.max_marks }}</td>
+                                                        <td>{{ assignment.marks }}</td>
+                                                        <td>
+                                                            {% if assignment.max_marks > 0 %}
+                                                                {{ assignment.marks|floatformat:2|default:0 }}%
+                                                            {% else %}
+                                                                N/A
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td><strong>Total Assignments</strong></td>
+                                                    <td><strong>{{ enrollment.component_marks.assignment.max }}</strong></td>
+                                                    <td><strong>{{ enrollment.component_marks.assignment.obtained }}</strong></td>
+                                                    <td><strong>
+                                                        {% if enrollment.component_marks.assignment.max > 0 %}
+                                                            {{ enrollment.component_marks.assignment.obtained|floatformat:2|default:0 }}%
+                                                        {% else %}
+                                                            N/A
+                                                        {% endif %}
+                                                    </strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="text-right">
+                                            <span class="badge badge-info">Scaled to {{ enrollment.component_marks.assignment.allocated }} marks: {{ enrollment.component_marks.assignment.scaled }}</span>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">Assignments</h5>
+                                        <div class="no-results">No assignment marks available</div>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Quizzes Section (if applicable) -->
+                                {% if enrollment.course.quiz_count > 0 %}
+                                    {% if enrollment.quizzes %}
+                                        <div class="component-section">
+                                            <h5 class="component-heading">Quizzes</h5>
+                                            <table class="internal-marks-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Quiz</th>
+                                                        <th>Max Marks</th>
+                                                        <th>Marks Obtained</th>
+                                                        <th>Percentage</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for quiz in enrollment.quizzes %}
+                                                        <tr>
+                                                            <td>Quiz {{ quiz.quiz_number }}</td>
+                                                            <td>{{ quiz.max_marks }}</td>
+                                                            <td>{{ quiz.marks }}</td>
+                                                            <td>
+                                                                {% if quiz.max_marks > 0 %}
+                                                                    {{ quiz.marks|floatformat:2|default:0 }}%
+                                                                {% else %}
+                                                                    N/A
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <td><strong>Total Quizzes</strong></td>
+                                                        <td><strong>{{ enrollment.component_marks.quiz.max }}</strong></td>
+                                                        <td><strong>{{ enrollment.component_marks.quiz.obtained }}</strong></td>
+                                                        <td><strong>
+                                                            {% if enrollment.component_marks.quiz.max > 0 %}
+                                                                {{ enrollment.component_marks.quiz.obtained|floatformat:2|default:0 }}%
+                                                            {% else %}
+                                                                N/A
+                                                            {% endif %}
+                                                        </strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="text-right">
+                                                <span class="badge badge-info">Scaled to {{ enrollment.component_marks.quiz.allocated }} marks: {{ enrollment.component_marks.quiz.scaled }}</span>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="component-section">
+                                            <h5 class="component-heading">Quizzes</h5>
+                                            <div class="no-results">No quiz marks available</div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <!-- Projects Section (if applicable) -->
+                                {% if enrollment.course.project_count > 0 %}
+                                    {% if enrollment.projects %}
+                                        <div class="component-section">
+                                            <h5 class="component-heading">Projects</h5>
+                                            <table class="internal-marks-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Project Title</th>
+                                                        <th>Max Marks</th>
+                                                        <th>Marks Obtained</th>
+                                                        <th>Percentage</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for project in enrollment.projects %}
+                                                        <tr>
+                                                            <td>{{ project.title|default:"Project" }}</td>
+                                                            <td>{{ project.max_marks }}</td>
+                                                            <td>{{ project.marks }}</td>
+                                                            <td>
+                                                                {% if project.max_marks > 0 %}
+                                                                    {{ project.marks|floatformat:2|default:0 }}%
+                                                                {% else %}
+                                                                    N/A
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <td><strong>Total Projects</strong></td>
+                                                        <td><strong>{{ enrollment.component_marks.project.max }}</strong></td>
+                                                        <td><strong>{{ enrollment.component_marks.project.obtained }}</strong></td>
+                                                        <td><strong>
+                                                            {% if enrollment.component_marks.project.max > 0 %}
+                                                                {{ enrollment.component_marks.project.obtained|floatformat:2|default:0 }}%
+                                                            {% else %}
+                                                                N/A
+                                                            {% endif %}
+                                                        </strong></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="text-right">
+                                                <span class="badge badge-info">Scaled to {{ enrollment.component_marks.project.allocated }} marks: {{ enrollment.component_marks.project.scaled }}</span>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="component-section">
+                                            <h5 class="component-heading">Projects</h5>
+                                            <div class="no-results">No project marks available</div>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <!-- External Marks (if available) -->
+                                {% if enrollment.external_marks %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">External Assessment</h5>
+                                        <table class="internal-marks-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Exam Type</th>
+                                                    <th>Max Marks</th>
+                                                    <th>Marks Obtained</th>
+                                                    <th>Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>End Semester Exam</td>
+                                                    <td>{{ enrollment.external_marks.max_marks }}</td>
+                                                    <td>{{ enrollment.external_marks.marks }}</td>
+                                                    <td>
+                                                        {% if enrollment.external_marks.max_marks > 0 %}
+                                                            {{ enrollment.external_marks.marks|floatformat:2|default:0 }}%
+                                                        {% else %}
+                                                            N/A
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="component-section">
+                                        <h5 class="component-heading">External Assessment</h5>
+                                        <div class="no-results">No external exam marks available</div>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Overall Summary -->
+                                <div class="marks-summary">
+                                    <h5 class="text-center">Overall Summary</h5>
+                                    
+                                    {% if enrollment.course_scheme %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Internal Weightage:</span>
+                                            <span>{{ enrollment.course_scheme.internal_weightage }}%</span>
+                                        </div>
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">External Weightage:</span>
+                                            <span>{{ enrollment.course_scheme.external_weightage }}%</span>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="marks-summary-row">
+                                        <span class="marks-summary-label">Total Internal Marks:</span>
+                                        <span>{{ enrollment.component_marks.total_internal }} / 100</span>
+                                    </div>
+                                    
+                                    {% if enrollment.weighted_marks.internal is not None %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Weighted Internal:</span>
+                                            <span>{{ enrollment.weighted_marks.internal }}</span>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if enrollment.external_marks %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">External Component:</span>
+                                            <span>{{ enrollment.external_marks.marks }} / {{ enrollment.external_marks.max_marks }}</span>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if enrollment.weighted_marks.external is not None %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Weighted External:</span>
+                                            <span>{{ enrollment.weighted_marks.external }}</span>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if enrollment.weighted_marks.final %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Final Score:</span>
+                                            <span>{{ enrollment.weighted_marks.final }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Final Score:</span>
+                                            <span>Assessment incomplete</span>
+                                        </div>
+                                    {% endif %}
+                                    {% if enrollment.grade != 'F' %}
+                                    <div class="marks-summary-row">
+                                        <span class="marks-summary-label">Status:</span>
+                                        <span class="badge badge-success">Pass</span>
+                                    </div>
+                                {% else %}
+                                    <div class="marks-summary-row">
+                                        <span class="marks-summary-label">Status:</span>
+                                        <span class="badge badge-danger">Fail</span>
+                                    </div>
+                                {% endif %}
+                                    {% if enrollment.grade %}
+                                        <div class="marks-summary-row">
+                                            <span class="marks-summary-label">Grade:</span>
+                                            <span>{{ enrollment.grade }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>  
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Combined JavaScript -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'js/Chart.min.js' %}"></script>
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/template.js' %}"></script>
+    <script src="{% static 'js/todolist.js' %}"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        // Auto-expand the latest semester
+        document.addEventListener("DOMContentLoaded", function() {
+            // Get all semesters
+            const semesters = [{% for semester, courses in enrollments_by_sem.items %}{{ semester }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+            
+            if (semesters.length > 0) {
+                // Find the max semester
+                const maxSemester = Math.max(...semesters);
+                
+                // Expand the latest semester
+                toggleSemester(maxSemester);
+            }
+        });
+        
+        function toggleSemester(semesterNum) {
+            const contentElement = document.getElementById(`semester-${semesterNum}-content`);
+            const chevronElement = document.getElementById(`chevron-${semesterNum}`);
+            
+            // Toggle display
+            if (contentElement.style.display === "block") {
+                contentElement.style.display = "none";
+                chevronElement.classList.remove("rotate-icon");
+            } else {
+                contentElement.style.display = "block";
+                chevronElement.classList.add("rotate-icon");
+            }
+        }
+    </script>
+</body>
+</html>

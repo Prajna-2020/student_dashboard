@@ -1,0 +1,428 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Admin Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  <style>
+  .profile-pic-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f5f7fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 18px;
+  }
+  /* For username text styling */
+  .d-flex.align-items-center span {
+    color: #495057;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+    /* Sidebar Styling */
+    .sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .content {
+            padding: 20px;
+        }
+        .stats-box {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            color: white;
+        }
+        .attendance-table {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .table thead {
+            background: #007bff;
+            color: white;
+        }
+        .stats-box i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .collapse {
+            margin-left: 20px;
+        }
+        /* Progress Circle Styles */
+        .progress-circle-sm {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+        }
+        .progress-circle-svg {
+            width: 100%;
+            height: 100%;
+        }
+        .progress-circle-track {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 4;
+        }
+        .progress-circle-bar {
+            fill: none;
+            stroke: #4CAF50;
+            stroke-width: 4;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: progress-circle-fill 1.5s ease-in-out forwards;
+        }
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+        }
+        @keyframes progress-circle-fill {
+            to {
+                stroke-dashoffset: var(--dash-offset);
+            }
+        }
+        
+        /* Stretch Card Styles */
+        .stretch-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stretch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Progress Bar Colors */
+        .progress-bar.bg-success {
+            background-color: #28a745 !important;
+        }
+        .progress-bar.bg-warning {
+            background-color: #ffc107 !important;
+        }
+        .progress-bar.bg-danger {
+            background-color: #dc3545 !important;
+        }
+        
+        /* Modal Content Styling */
+        .modal-xl {
+            max-width: 1200px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-scroller">
+<!-- partial:partials/_navbar.html -->
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+    <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+    <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+    
+    <ul class="navbar-nav mr-lg-2">
+        <!--<center>
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+        </center>!-->
+        <li class="nav-item nav-search d-none d-lg-block">
+        <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+        </li>
+    </ul>
+    <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item dropdown mr-1">
+        
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+            
+            <a class="dropdown-item">
+            <div class="item-thumbnail">
+                <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+            </div>
+            
+            </a>
+    
+        </div>
+        </li>
+        
+        <li class="nav-item nav-profile dropdown">
+        <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            {% if request.user.student.profile_picture %}
+            <img src="{{ request.user.student.profile_picture.url }}" alt="profile" class="profile-img"/>
+            {% else %}
+            <div class="profile-pic-placeholder">
+                <i class="ti-user"></i>  <!-- Using Themify icon -->
+            </div>
+            {% endif %}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <a href="{% url 'student_change_password' %}" class="dropdown-item">
+            <i class="ti-settings text-primary"></i>
+            Change Password
+            </a>
+            <a class="dropdown-item" href="/signout/">
+            <i class="ti-power-off text-primary"></i>
+                Logout
+            </a>
+        </div>
+        </li>
+    </ul>
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <span class="ti-view-list"></span>
+    </button>
+    </div>
+</nav>
+<!-- partial -->
+<div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+    
+    <ul class="nav">
+        <li class="nav-item">
+        <a class="nav-link" href="/home/">
+            <i class="ti-shield menu-icon"></i>
+            <span class="menu-title">Dashboard</span>
+        </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'profile_details' %}" class="nav-link">
+            <i class="ti-user menu-icon"></i>
+            <span class="menu-title">View Profile</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a href="{% url 'student_attendance' %}" class="nav-link">
+            <i class="ti-write menu-icon"></i>
+            <span class="menu-title">Attendance Status</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'student_enrollments' %}">
+            <i class="ti-github menu-icon"></i>
+            <span class="menu-title">Enrollments</span>
+        </a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'update_all_results' %}">
+            <i class="ti-bar-chart menu-icon"></i>
+            <span class="menu-title">Results</span>
+        </a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link" href="{% url 'student_calendar' %}">
+              <i class="ti-calendar menu-icon"></i>
+              <span class="menu-title">Event Calendar</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'student_announcements' %}">
+                <i class="ti-bell menu-icon"></i>
+                <span class="menu-title">Announcements</span>
+            </a>
+        </li>
+    </ul>
+    </nav>
+    <!-- partial -->
+    <!-- Main content -->
+    <div class="main-panel">
+        <div class="content-wrapper">
+            <div class="attendance-content">
+                <h2 class="text-center mb-4">📊 Student Attendance</h2>
+                
+                <!-- Semester Cards -->
+                <div class="row">
+                    {% for semester, courses in semesters.items %}
+                    {% if courses %}
+                    <div class="col-md-3 mb-4">
+                        <div class="card border-primary" style="border-radius: 15px;">
+                            <div class="card-body text-center py-4">
+                                <i class="fas fa-book-open mb-3 text-primary" style="font-size: 2rem;"></i>
+                                <h4 class="card-title">Semester {{ semester }}</h4>
+                                <button class="btn btn-primary mt-3" style="border-radius: 10px;" data-toggle="modal" data-target="#semester{{ semester }}Modal">View Attendance</button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                
+                <!-- Modals for each semester -->
+                {% for semester, courses in semesters.items %}
+                {% if courses %}
+                <!-- Semester {{ semester }} Subjects Modal -->
+                <div class="modal fade" id="semester{{ semester }}Modal" tabindex="-1" role="dialog" aria-labelledby="semester{{ semester }}ModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="semester{{ semester }}ModalLabel">Semester {{ semester }} Attendance</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    {% for course in courses %}
+                                    <!-- {{ course.course_name }} -->
+                                    <div class="col-md-3 mb-4">
+                                        <div class="card stretch-card" style="border-radius: 15px; height: 100%;">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h4 class="card-title">{{ course.course_name }}</h4>
+                                                    <div class="progress-circle-sm" data-percent="{{ course.attendance_percentage }}">
+                                                        <svg class="progress-circle-svg" viewBox="0 0 36 36">
+                                                            <circle class="progress-circle-track" cx="18" cy="18" r="15.9155"></circle>
+                                                            <circle class="progress-circle-bar" cx="18" cy="18" r="15.9155"></circle>
+                                                        </svg>
+                                                        <div class="progress-circle-text">
+                                                            <span>{{ course.attendance_percentage }}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="progress mt-3">
+                                                    <div class="progress-bar {{ course.status_class }}" role="progressbar" style="width: {{ course.attendance_percentage }}%" aria-valuenow="{{ course.attendance_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <p class="mt-2">Classes attended: {{ course.days_present }}/{{ course.total_days }}</p>
+                                                <p class="mt-2">Classes missed: {{ course.days_absent }}/{{ course.total_days }}</p>
+                                                <p class="mt-2">Course Code: {{ course.course_code }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+         <!-- partial:partials/_footer.html -->
+         <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+            </div>
+          </footer>
+          <!-- partial -->
+    </div>
+
+    <!-- plugins:js -->
+    <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+    <!-- Plugin js for this page-->
+    <script src="{% static 'js/Chart.min.js' %}"></script>
+    <!-- inject:js -->
+    <script src="{% static 'js/off-canvas.js' %}"></script>
+    <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'js/template.js' %}"></script>
+    <!-- Custom js for this page-->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const circles = document.querySelectorAll('.progress-circle-sm');
+            circles.forEach(circle => {
+                const percent = parseFloat(circle.getAttribute('data-percent'));
+                const dashOffset = 100 - percent;
+                circle.style.setProperty('--dash-offset', dashOffset);
+                
+                const bar = circle.querySelector('.progress-circle-bar');
+                if(percent < 50) {
+                    bar.style.stroke = '#dc3545'; // Red for <50%
+                } else if(percent < 75) {
+                    bar.style.stroke = '#ffc107'; // Yellow for 50-74%
+                } else {
+                    bar.style.stroke = '#28a745'; // Green for 75+%
+                }
+            });
+        });
+    </script>
+</body>
+</html>

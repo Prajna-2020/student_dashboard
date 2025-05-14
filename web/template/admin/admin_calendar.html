@@ -1,0 +1,1230 @@
+is there any issue with this html,its not editing
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title> Event Calendar</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  <!-- plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  <style>
+    /* Admin Portal Styles */
+    .profile-pic-placeholder {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      font-size: 18px;
+    }
+    
+    .d-flex.align-items-center span {
+      color: #495057;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    /* Sidebar Styling */
+    .sidebar-nav {
+      background: rgb(255, 255, 255) !important;
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar-nav .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar-nav .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar-nav .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar-nav .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar-nav .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar-nav .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    /* Event Calendar Styles */
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2980b9;
+      --success-color: #2ecc71;
+      --danger-color: #e74c3c;
+      --light-gray: #f5f5f5;
+      --dark-gray: #333;
+      --border-color: #ddd;
+    }
+
+    .calendar-container {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .calendar {
+      flex: 3;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background-color: var(--light-gray);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .month-navigator {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .month-navigator button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .month-year {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 10px;
+    }
+
+    .weekday-header {
+      text-align: center;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    .calendar-day {
+      border: 1px solid var(--border-color);
+      height: 100px;
+      padding: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      background-color: #f0f0f0;
+    }
+
+    .calendar-day.selected {
+      background-color: #e6f7ff;
+      border: 2px solid var(--primary-color);
+    }
+
+    .calendar-day.different-month {
+      background-color: #f8f8f8;
+      color: #aaa;
+    }
+
+    .calendar-day .day-number {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .event-dot {
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 2px;
+    }
+
+    .event-dots {
+      margin-top: 3px;
+    }
+
+    .event-preview {
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+      padding: 2px;
+      border-radius: 3px;
+    }
+
+    .academic { background-color: #3498db; color: white; }
+    .cultural { background-color: #9b59b6; color: white; }
+    .sports { background-color: #2ecc71; color: white; }
+    .other { background-color: #e67e22; color: white; }
+
+    .calendar-sidebar {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .events-panel {
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .event-item {
+      padding: 10px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+    }
+
+    .event-item:hover {
+      background-color: var(--light-gray);
+    }
+
+    .event-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .event-time {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .event-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+      margin-right: 5px;
+      color: white;
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .event-form {
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+
+    .event-details {
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+    }
+
+    .detail-item {
+      margin-bottom: 10px;
+    }
+
+    .detail-label {
+      font-weight: bold;
+      display: inline-block;
+      width: 100px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .department-checkboxes {
+      max-height: 150px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      background: white;
+    }
+
+    .form-check {
+      margin-bottom: 5px;
+    }
+
+    .form-check-input {
+      margin-right: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .calendar-container {
+        flex-direction: column;
+      }
+      
+      .calendar-day {
+        height: 60px;
+      }
+    }
+
+    .sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(185, 184, 198, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+          <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+          <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+        </div>
+        <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+                
+          <ul class="navbar-nav mr-lg-2">
+            <!--<center>
+              <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+            </center>!-->
+            <li class="nav-item nav-search d-none d-lg-block">
+              <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+            </li>
+          </ul>
+          <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item dropdown mr-1">
+             
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+                
+                <a class="dropdown-item">
+                  <div class="item-thumbnail">
+                      <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                  </div>
+                 
+                </a>
+         
+              </div>
+            </li>
+            
+            <li class="nav-item nav-profile dropdown">
+              <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+              <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+                {% if user.profile_picture %}
+                  <img src="{{ user.profile_picture.url }}" alt="profile"/>
+                {% else %}
+                  <div class="profile-pic-placeholder">
+                    <i class="ti-user"></i>  <!-- Using Themify icon -->
+                  </div>
+                {% endif %}
+              </a>
+              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+                <a class="dropdown-item" href="{% url 'change_password' %}">
+                  <i class="ti-settings text-primary"></i>
+                  Change Password
+                </a>
+                <a class="dropdown-item" href="/signout/">
+                  <i class="ti-power-off text-primary"></i>
+                   Logout
+                </a>
+                <a class="dropdown-item" href="{% url 'edit_admin_profile' %}">
+                  <i class="ti-user text-primary"></i>
+                  Edit Profile
+              </a>
+              </div>
+            </li>
+          </ul>
+          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+            <span class="ti-view-list"></span>
+          </button>
+        </div>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_sidebar.html -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+          
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/home/">
+                <i class="ti-home menu-icon"></i>
+                <span class="menu-title">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_by_file' %}">
+                <i class="ti-user menu-icon"></i>
+                <span class="menu-title">Add User</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_department' %}">
+                <i class="ti-write menu-icon"></i>
+                <span class="menu-title">Departments</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'manage_schemes' %}">
+                <i class="ti-stamp menu-icon"></i>
+                <span class="menu-title">Scheme</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{%url 'manage_courses_and_schemes' %}">
+                <i class="ti-ruler-pencil menu-icon"></i>
+                <span class="menu-title">Courses</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                  <i class="ti-id-badge menu-icon"></i>
+                  <span class="menu-title">Enrollment</span>
+                  <i class="menu-arrow"></i>
+              </a>
+              <div class="collapse" id="auth">
+                  <ul class="nav flex-column sub-menu">
+                      <!-- Link for Form (Manual User Creation) -->
+                      <li class="nav-item">
+                        <a class="nav-link" href="{%url 'manage_enrollments' %}">Enroll</a>
+                      </li>
+                      <!-- Link for Add by File (Bulk User Creation) -->
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'view_course_enrollments' %}">Course Scheme Mapping</a>
+                      </li>
+                  </ul>
+              </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                <i class="ti-book menu-icon"></i>
+                <span class="menu-title">Students</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+                <ul class="nav flex-column sub-menu">
+                    <!-- Link for Form (Manual User Creation) -->
+                    <li class="nav-item">
+                      <a class="nav-link" href="{%url 'bulk_upload_student' %}">Add Students</a>
+                    </li>
+                    <!-- Link for Add by File (Bulk User Creation) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'list_students' %}">Manage Students</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="ti-agenda menu-icon"></i>
+              <span class="menu-title">Faculty</span>
+              <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                  <!-- Link for Form (Manual User Creation) -->
+                  <li class="nav-item">
+                    <a class="nav-link" href="{%url 'bulk_upload_faculty' %}">Add Faculty</a>
+                  </li>
+                  <!-- Link for Add by File (Bulk User Creation) -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'list_faculty' %}">Manage Faculty</a>
+                  </li>
+              </ul>
+          </div>
+      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'admin_calendar' %}">
+              <i class="ti-calendar menu-icon"></i>
+              <span class="menu-title">Admin Calendar</span>
+          </a>
+      </li>
+          </ul>
+        </nav>
+        <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="calendar-container">
+            <div class="calendar">
+              <div class="calendar-header">
+                <div class="month-navigator">
+                  <button id="prev-month">&lt;</button>
+                  <span id="current-month-year" class="month-year">April 2025</span>
+                  <button id="next-month">&gt;</button>
+                </div>
+                <div>
+                  <button id="today-btn" class="btn btn-primary">Today</button>
+                </div>
+              </div>
+              <div class="calendar-grid" id="weekday-headers">
+                <div class="weekday-header">Sun</div>
+                <div class="weekday-header">Mon</div>
+                <div class="weekday-header">Tue</div>
+                <div class="weekday-header">Wed</div>
+                <div class="weekday-header">Thu</div>
+                <div class="weekday-header">Fri</div>
+                <div class="weekday-header">Sat</div>
+              </div>
+              <div class="calendar-grid" id="calendar-days">
+                <!-- Calendar days will be generated here -->
+              </div>
+            </div>
+            
+            <div class="calendar-sidebar">
+              <div class="events-panel">
+                <div class="panel-title">
+                  <span id="selected-date-display">Apr 29, 2025</span> Events
+                </div>
+                <div id="events-list">
+                  <!-- Events will be populated here -->
+                </div>
+              </div>
+              
+              <div class="event-form hidden" id="event-form">
+                <div class="panel-title">Add Event</div>
+                <form id="add-event-form">
+                  <div class="form-group">
+                    <label for="event-title">Title</label>
+                    <input type="text" id="event-title" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description" rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="event-start">Start Date & Time</label>
+                    <input type="datetime-local" id="event-start" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="event-end">End Date & Time</label>
+                    <input type="datetime-local" id="event-end" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="event-type">Event Type</label>
+                    <select id="event-type" required>
+                      <option value="academic">Academic</option>
+                      <option value="cultural">Cultural</option>
+                      <option value="sports">Sports</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location">
+                  </div>
+                  <input type="hidden" id="event-id">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success">Save Event</button>
+                            <button type="button" id="cancel-event" class="btn btn-danger">Cancel</button>
+                        </div>
+                </form>
+              </div>
+              
+              <div class="event-details hidden" id="event-details">
+                <div class="panel-title">Event Details</div>
+                <div id="event-detail-content">
+                  <!-- Event details will be populated here -->
+                </div>
+                <div class="event-actions">
+                        <button id="edit-event" class="btn btn-primary">Edit</button>
+                        <button id="delete-event" class="btn btn-danger">Delete</button>
+                        <button id="close-details" class="btn">Close</button>
+                    </div>
+                </div>
+                
+                <div id="add-event-btn-container">
+                    <button id="add-event-btn" class="btn btn-success">Add New Event</button>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- partial:partials/_footer.html -->
+    <footer class="footer">
+        <div class="d-sm-flex justify-content-center justify-content-sm-between">
+          <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+          <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+        </div>
+      </footer>
+      <!-- partial -->
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{%static 'js/dashboard.js' %}"></script>
+  
+  <!-- Event Calendar JavaScript -->
+  <script>
+  // DOM Elements
+  const calendarDays = document.getElementById('calendar-days');
+  const currentMonthYearElement = document.getElementById('current-month-year');
+  const prevMonthButton = document.getElementById('prev-month');
+  const nextMonthButton = document.getElementById('next-month');
+  const todayButton = document.getElementById('today-btn');
+  const selectedDateDisplay = document.getElementById('selected-date-display');
+  const eventsList = document.getElementById('events-list');
+  const eventForm = document.getElementById('event-form');
+  const addEventForm = document.getElementById('add-event-form');
+  const eventDetails = document.getElementById('event-details');
+  const addEventBtn = document.getElementById('add-event-btn');
+  const cancelEventBtn = document.getElementById('cancel-event');
+  const editEventBtn = document.getElementById('edit-event');
+  const deleteEventBtn = document.getElementById('delete-event');
+  const closeDetailsBtn = document.getElementById('close-details');
+
+  // State variables
+  let currentDate = new Date();
+  let selectedDate = new Date();
+  let selectedEvent = null;
+  let events = [];
+
+  // Initialize calendar
+  function initCalendar() {
+      fetchEvents().then(() => {
+          renderCalendar();
+          updateSelectedDateDisplay();
+          showEventsForSelectedDate();
+      });
+      
+      // Event listeners
+      prevMonthButton.addEventListener('click', () => {
+          currentDate.setMonth(currentDate.getMonth() - 1);
+          renderCalendar();
+      });
+      
+      nextMonthButton.addEventListener('click', () => {
+          currentDate.setMonth(currentDate.getMonth() + 1);
+          renderCalendar();
+      });
+      
+      todayButton.addEventListener('click', () => {
+          currentDate = new Date();
+          selectedDate = new Date();
+          renderCalendar();
+          updateSelectedDateDisplay();
+          showEventsForSelectedDate();
+      });
+      
+      addEventBtn.addEventListener('click', () => {
+          showEventForm();
+      });
+      
+      cancelEventBtn.addEventListener('click', () => {
+          hideEventForm();
+      });
+      
+      addEventForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          saveEvent();
+      });
+      
+      editEventBtn.addEventListener('click', () => {
+          editEvent();
+      });
+      
+      deleteEventBtn.addEventListener('click', () => {
+          deleteEvent();
+      });
+      
+      closeDetailsBtn.addEventListener('click', () => {
+          hideEventDetails();
+      });
+  }
+
+  // Fetch events from server
+  async function fetchEvents() {
+      try {
+          const response = await fetch('/api/events/');
+          if (!response.ok) {
+              throw new Error('Failed to fetch events');
+          }
+          const data = await response.json();
+          events = JSON.parse(data).map(item => {
+              return {
+                  ...item.fields,
+                  id: item.pk,
+                  start_date: new Date(item.fields.start_date),
+                  end_date: new Date(item.fields.end_date)
+                  
+              };
+          });
+      } catch (error) {
+          console.error('Error fetching events:', error);
+          // Fallback to mock data if API fails
+          events = getMockEvents();
+      }
+  }
+
+  // Render the calendar grid
+  function renderCalendar() {
+      calendarDays.innerHTML = '';
+      
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      
+      currentMonthYearElement.textContent = new Date(year, month, 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      
+      // Calculate the first day to display (might be from the previous month)
+      const firstDayOfMonth = new Date(year, month, 1);
+      const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 = Sunday, 1 = Monday, etc.
+      
+      const lastDayOfMonth = new Date(year, month + 1, 0);
+      const totalDaysInMonth = lastDayOfMonth.getDate();
+      
+      // Previous month days
+      const lastDayOfPrevMonth = new Date(year, month, 0).getDate();
+      
+      // Create calendar grid with days from previous, current, and next month
+      let dayCounter = 1;
+      const totalCells = 42; // 6 rows x 7 days
+      
+      for (let i = 0; i < totalCells; i++) {
+          const dayCell = document.createElement('div');
+          dayCell.className = 'calendar-day';
+          
+          // Previous month
+          if (i < startingDayOfWeek) {
+              const prevMonthDay = lastDayOfPrevMonth - startingDayOfWeek + i + 1;
+              dayCell.innerHTML = `<div class="day-number">${prevMonthDay}</div>`;
+              dayCell.classList.add('different-month');
+              dayCell.dataset.date = new Date(year, month - 1, prevMonthDay).toISOString();
+          } 
+          // Current month
+          else if (i < startingDayOfWeek + totalDaysInMonth) {
+              const currentDay = i - startingDayOfWeek + 1;
+              dayCell.innerHTML = `<div class="day-number">${currentDay}</div>`;
+              dayCell.dataset.date = new Date(year, month, currentDay).toISOString();
+              
+              // Check if this is today
+              const today = new Date();
+              if (currentDay === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                  dayCell.style.backgroundColor = '#fff8e1';
+              }
+              
+              // Check if this is the selected date
+              if (currentDay === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()) {
+                  dayCell.classList.add('selected');
+              }
+              
+              // Add event indicators
+              const dayEvents = getEventsForDate(new Date(year, month, currentDay));
+              if (dayEvents.length > 0) {
+                  const eventDotsContainer = document.createElement('div');
+                  eventDotsContainer.className = 'event-dots';
+                  
+                  // Group events by type
+                  const eventTypes = {};
+                  dayEvents.forEach(event => {
+                      if (!eventTypes[event.event_type]) {
+                          eventTypes[event.event_type] = 0;
+                      }
+                      eventTypes[event.event_type]++;
+                  });
+                  
+                  // Create dots for each event type
+                  for (const [type, count] of Object.entries(eventTypes)) {
+                      const dot = document.createElement('span');
+                      dot.className = `event-dot ${type}`;
+                      eventDotsContainer.appendChild(dot);
+                  }
+                  
+                  dayCell.appendChild(eventDotsContainer);
+                  
+                  // Show preview of first event
+                  if (dayEvents.length > 0 && dayCell.clientHeight > 60) {
+                      const previewEvent = document.createElement('div');
+                      previewEvent.className = `event-preview ${dayEvents[0].event_type}`;
+                      previewEvent.textContent = dayEvents[0].title;
+                      dayCell.appendChild(previewEvent);
+                      
+                      if (dayEvents.length > 1) {
+                          const moreEvents = document.createElement('div');
+                          moreEvents.className = 'event-preview';
+                          moreEvents.textContent = `+${dayEvents.length - 1} more`;
+                          dayCell.appendChild(moreEvents);
+                      }
+                  }
+              }
+          } 
+          // Next month
+          else {
+              const nextMonthDay = i - (startingDayOfWeek + totalDaysInMonth) + 1;
+              dayCell.innerHTML = `<div class="day-number">${nextMonthDay}</div>`;
+              dayCell.classList.add('different-month');
+              dayCell.dataset.date = new Date(year, month + 1, nextMonthDay).toISOString();
+          }
+          
+          // Add click event to select a day
+          dayCell.addEventListener('click', () => {
+              // Remove selected class from all days
+              document.querySelectorAll('.calendar-day').forEach(day => {
+                  day.classList.remove('selected');
+              });
+              
+              // Add selected class to clicked day
+              dayCell.classList.add('selected');
+              
+              // Update selected date
+              selectedDate = new Date(dayCell.dataset.date);
+              updateSelectedDateDisplay();
+              showEventsForSelectedDate();
+          });
+          
+          calendarDays.appendChild(dayCell);
+      }
+  }
+
+  // Update the selected date display
+  function updateSelectedDateDisplay() {
+      selectedDateDisplay.textContent = selectedDate.toLocaleDateString('en-US', { 
+          month: 'short', 
+          day: 'numeric', 
+          year: 'numeric' 
+      });
+  }
+
+  // Get events for a specific date
+  function getEventsForDate(date) {
+      return events.filter(event => {
+          const eventStartDate = new Date(event.start_date);
+          return eventStartDate.getDate() === date.getDate() && 
+                 eventStartDate.getMonth() === date.getMonth() && 
+                 eventStartDate.getFullYear() === date.getFullYear();
+      });
+  }
+
+  // Show events for the selected date
+  function showEventsForSelectedDate() {
+      const dateEvents = getEventsForDate(selectedDate);
+      eventsList.innerHTML = '';
+      
+      if (dateEvents.length === 0) {
+          eventsList.innerHTML = '<div class="event-item">No events scheduled for this day</div>';
+          return;
+      }
+      
+      dateEvents.forEach(event => {
+          const eventItem = document.createElement('div');
+          eventItem.className = 'event-item';
+          eventItem.dataset.eventId = event.id;
+          
+          const timeFormatOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+          const startTime = new Date(event.start_date).toLocaleTimeString('en-US', timeFormatOptions);
+          const endTime = new Date(event.end_date).toLocaleTimeString('en-US', timeFormatOptions);
+          
+          eventItem.innerHTML = `
+              <div class="event-badge ${event.event_type}">${event.event_type}</div>
+              <div class="event-title">${event.title}</div>
+              <div class="event-time">${startTime} - ${endTime}</div>
+          `;
+          
+          // Add click event to show details
+          eventItem.addEventListener('click', () => {
+              selectedEvent = event;
+              showEventDetails(event);
+          });
+          
+          eventsList.appendChild(eventItem);
+      });
+  }
+
+  // Show event form
+  function showEventForm(isEdit = false) {
+      hideEventDetails();
+      
+      const startDateInput = document.getElementById('event-start');
+      const endDateInput = document.getElementById('event-end');
+      
+      if (!isEdit) {
+          // For new events, set default times
+          const eventDate = new Date(selectedDate);
+          eventDate.setHours(9, 0, 0); // 9:00 AM
+          
+          const eventEndDate = new Date(selectedDate);
+          eventEndDate.setHours(10, 0, 0); // 10:00 AM
+          
+          document.getElementById('event-title').value = '';
+          document.getElementById('event-description').value = '';
+          startDateInput.value = formatDateTimeForInput(eventDate);
+          endDateInput.value = formatDateTimeForInput(eventEndDate);
+          document.getElementById('event-type').value = 'academic';
+          document.getElementById('event-location').value = '';
+          document.getElementById('event-id').value = '';
+          
+      } else {
+          // For editing, fill with selected event data
+          document.getElementById('event-title').value = selectedEvent.title;
+          document.getElementById('event-description').value = selectedEvent.description;
+          startDateInput.value = formatDateTimeForInput(new Date(selectedEvent.start_date));
+          endDateInput.value = formatDateTimeForInput(new Date(selectedEvent.end_date));
+          document.getElementById('event-type').value = selectedEvent.event_type;
+          document.getElementById('event-location').value = selectedEvent.location || '';
+          document.getElementById('event-id').value = selectedEvent.id;
+          
+          // Set department selections
+          document.querySelectorAll('.department-checkboxes input[type="checkbox"]').forEach(checkbox => {
+          checkbox.checked = selectedEvent.departments.some(dept => dept.department_id == checkbox.value);
+          });
+      }
+      
+      eventForm.classList.remove('hidden');
+  }
+
+  // Hide event form
+  function hideEventForm() {
+      eventForm.classList.add('hidden');
+  }
+
+  // Show event details
+  function showEventDetails(event) {
+    hideEventForm();
+    
+    const eventDetailContent = document.getElementById('event-detail-content');
+    
+    const startDateTime = new Date(event.start_date).toLocaleString('en-US');
+    const endDateTime = new Date(event.end_date).toLocaleString('en-US');
+    
+    // Initialize departmentNames with a default value
+
+    
+    eventDetailContent.innerHTML = `
+        <div class="detail-item">
+            <span class="detail-label">Title:</span> ${event.title}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Type:</span> 
+            <span class="event-badge ${event.event_type}">${event.event_type}</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Description:</span> ${event.description || 'N/A'}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Start:</span> ${startDateTime}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">End:</span> ${endDateTime}
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Location:</span> ${event.location || 'N/A'}
+        </div>
+    `;
+    
+    eventDetails.classList.remove('hidden');
+}
+  // Hide event details
+  function hideEventDetails() {
+      eventDetails.classList.add('hidden');
+  }
+
+  // Format date for datetime-local input
+  function formatDateTimeForInput(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  // Save event (create or update)
+  async function saveEvent() {
+      const eventId = document.getElementById('event-id').value;
+      const title = document.getElementById('event-title').value;
+      const description = document.getElementById('event-description').value;
+      const startDate = new Date(document.getElementById('event-start').value);
+      const endDate = new Date(document.getElementById('event-end').value);
+      const eventType = document.getElementById('event-type').value;
+      const location = document.getElementById('event-location').value;
+      
+      
+      // Validate form
+      if (!title || !startDate || !endDate) {
+          alert('Please fill in all required fields');
+          return;
+      }
+      
+      if (startDate > endDate) {
+          alert('End date must be after start date');
+          return;
+      }
+      
+      try {
+          let response;
+          const eventData = {
+              title,
+              description,
+              start_date: startDate.toISOString(),
+              end_date: endDate.toISOString(),
+              event_type: eventType,
+              location
+          };
+          
+          if (eventId) {
+              // Update existing event
+              response = await fetch(`/api/events/${eventId}/`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': getCookie('csrftoken')
+                  },
+                  body: JSON.stringify(eventData)
+              });
+          } else {
+              // Create new event
+              response = await fetch('/api/events/create/', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': getCookie('csrftoken')
+                  },
+                  body: JSON.stringify(eventData)
+              });
+          }
+          
+          if (!response.ok) {
+              throw new Error('Failed to save event');
+          }
+          
+          // Refresh events
+          await fetchEvents();
+          
+          // Reset UI
+          hideEventForm();
+          renderCalendar();
+          showEventsForSelectedDate();
+          
+      } catch (error) {
+          console.error('Error saving event:', error);
+          alert('Failed to save event. Please try again.');
+      }
+  }
+
+
+  // Edit selected event
+  function editEvent() {
+      if (selectedEvent) {
+          showEventForm(true);
+      }
+  }
+
+  // Delete selected event
+  async function deleteEvent() {
+      if (!selectedEvent) return;
+      
+      if (!confirm('Are you sure you want to delete this event?')) {
+          return;
+      }
+      
+      try {
+          const response = await fetch(`/api/events/${selectedEvent.id}/delete/`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': getCookie('csrftoken')
+              }
+          });
+          
+          if (!response.ok) {
+              throw new Error('Failed to delete event');
+          }
+          
+          // Refresh events
+          await fetchEvents();
+          
+          // Reset UI
+          selectedEvent = null;
+          hideEventDetails();
+          renderCalendar();
+          showEventsForSelectedDate();
+          
+      } catch (error) {
+          console.error('Error deleting event:', error);
+          alert('Failed to delete event. Please try again.');
+      }
+  }
+
+  // Helper function to get CSRF token
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+
+  // Initialize on DOM load
+  document.addEventListener('DOMContentLoaded', initCalendar);
+</script>
+</body>
+</html>

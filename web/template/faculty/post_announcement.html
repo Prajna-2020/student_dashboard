@@ -1,0 +1,440 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Faculty Portal - Change Password</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %} "/>
+  
+  <style>
+    /* Base Styling */
+    .announcement-card {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .announcement-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 32px rgba(0,0,0,0.08);
+    }
+
+    /* Form Styling */
+    .form-header {
+        border-bottom: 1px solid #f5f5f5;
+        padding: 1.5rem 2rem;
+        background: #fafafa;
+    }
+
+    .form-title {
+        color: #404040;
+        font-weight: 600;
+        font-size: 1.25rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control-custom {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 0.875rem 1rem;
+        transition: all 0.3s ease;
+        background: #fff;
+    }
+
+    .form-control-custom:focus {
+        border-color: #a0a0a0;
+        box-shadow: 0 0 0 3px rgba(160,160,160,0.1);
+    }
+
+    .submit-btn {
+        background: #707070;
+        color: white;
+        padding: 0.875rem 2rem;
+        border-radius: 8px;
+        border: none;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .submit-btn:hover {
+        background: #606060;
+        transform: translateY(-1px);
+    }
+
+    /* Course Cards */
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .course-card {
+        background: white;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .course-card:hover {
+        border-color: #d0d0d0;
+        transform: translateY(-3px);
+    }
+
+    .course-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #f0f0f0;
+        transition: all 0.3s ease;
+    }
+
+    .course-card:hover::before {
+        background: #707070;
+    }
+
+    .course-title {
+        color: #404040;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .course-code {
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        background: #f8f8f8;
+        color: #606060;
+        text-decoration: none;
+        margin-top: 1rem;
+    }
+
+    .action-link:hover {
+        background: #f0f0f0;
+        color: #404040;
+        transform: translateY(-1px);
+    }
+
+    /* Animations */
+    @keyframes cardEntrance {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-entrance {
+        animation: cardEntrance 0.6s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+
+    /* Password Change Specific Styles */
+    .faculty-password-change {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .faculty-password-change h2 {
+      color: #3498db;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .faculty-password-change p {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 10px 25px;
+      border-radius: 5px;
+      font-weight: 500;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-secondary {
+      background-color: #95a5a6;
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #7f8c8d;
+    }
+
+    /* Alert Styles */
+    .alert {
+      padding: 15px;
+      margin-bottom: 25px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .alert-success {
+      color: #155724;
+      background-color: #d4edda;
+      border-color: #c3e6cb;
+    }
+
+    .alert-error {
+      color: #721c24;
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .faculty-password-change {
+        margin: 20px;
+        padding: 20px;
+      }
+      
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- Navbar -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 150px; height: auto;" alt="logo"/>
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 280px; height: auto;" alt="logo"/>
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <span class="mr-2 d-none d-lg-inline text-gray-600">{{ request.user.get_full_name }}</span>
+              {% if request.user.faculty.profile_picture %}
+              <img src="{{ request.user.faculty.profile_picture.url }}" alt="Profile" class="rounded-circle" width="32">
+              {% else %}
+              <i class="ti-user"></i>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="/profile/">
+                <i class="ti-user text-primary"></i> Profile
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i> Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'faculty_change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- Sidebar -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/fac_course/">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Courses</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_list_students' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Main Content -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <!-- Post Announcement Form -->
+<div class="col-md-12 grid-margin">
+    <div class="announcement-card animate-entrance">
+        <div class="form-header">
+            <h4 class="form-title">Create New Announcement</h4>
+            <div class="row">
+                <div class="col-md-12">
+                  <a href="{% url 'faculty_dashboard' %}" class="btn btn-light mb-3">
+                    <i class="ti-arrow-left"></i> Back to Dashboard
+                  </a>
+                  
+                </div>
+              </div>
+        </div>
+        
+        <div class="card-body p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">Select Course</label>
+                    <select name="course" class="form-control-custom w-100">
+                        {% for course in courses %}
+                        <option value="{{ course.course_id }}">{{ course.course_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Announcement Title</label>
+                    <input type="text" name="title" class="form-control-custom w-100" 
+                           placeholder="Enter title...">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Announcement Content</label>
+                    <textarea name="content" class="form-control-custom w-100" 
+                              rows="4" placeholder="Write your announcement..."></textarea>
+                </div>
+
+                <div class="text-right">
+                    <button type="submit" class="submit-btn">
+                        Publish Announcement →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+                 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <!-- plugins:js -->
+  <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- inject:js -->
+  <script src="{% static 'js/off-canvas.js' %}"></script>
+  <script src="{% static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'js/template.js' %}"></script>
+  <!-- endinject -->
+</body>
+</html>

@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET - Faculty Profile</title>
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Nunito', sans-serif;
+    }
+    .profile-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .profile-card {
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .profile-header {
+      background-color: #79797d;
+      color: white;
+      padding: 20px 20px 60px;
+      text-align: center;
+      position: relative;
+    }
+    .profile-picture {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid white;
+      margin: -60px auto 20px;
+      display: block;
+      background-color: #ddd;
+      position: relative;
+      z-index: 2;
+    }
+    .profile-body {
+      padding: 30px;
+      background-color: white;
+    }
+    .form-group label {
+      font-weight: 600;
+    }
+    .btn-save {
+      background-color: #4b49ac;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 5px;
+      border: none;
+    }
+    .btn-save:hover {
+      background-color: #3a3897;
+    }
+    .back-btn {
+      color: #4b49ac;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    .back-btn:hover {
+      text-decoration: underline;
+    }
+    .section-title {
+      color: #9c9baa;
+      border-bottom: 2px solid #a4a3ae;
+      padding-bottom: 5px;
+      margin-top: 20px;
+    }
+    .readonly-field {
+      background-color: #f8f9fa;
+    }
+    .tab-content {
+      padding: 20px 0;
+    }
+    .nav-tabs .nav-link.active {
+      color: #4b49ac;
+      font-weight: bold;
+      border-bottom: 3px solid #4b49ac;
+    }
+    .nav-tabs .nav-link {
+      color: #495057;
+    }
+    .custom-file-upload {
+      display: inline-block;
+      padding: 6px 12px;
+      cursor: pointer;
+      background-color: #f8f9fa;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type=file] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <a href="{% url 'faculty_dashboard' %}" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+    
+    <div class="profile-card">
+      <div class="profile-header">
+        <h2>Faculty Profile</h2>
+      </div>
+      
+      <form method="POST" enctype="multipart/form-data" class="forms-sample">
+        {% csrf_token %}
+        
+        <div class="text-center">
+          {% if faculty.profile_picture %}
+            <img id="profile-preview" src="{{ faculty.profile_picture.url }}" class="profile-picture">
+          {% else %}
+            <img id="profile-preview" src="{% static 'images/default-profile.png' %}" class="profile-picture">
+          {% endif %}
+          
+          <div class="mb-3" style="max-width: 300px; margin: 0 auto;">
+            <div class="file-input-wrapper">
+              <button type="button" class="custom-file-upload">
+                <i class="fas fa-camera"></i> Change Photo
+              </button>
+              <input type="file" id="profile_picture" name="profile_picture" accept="image/*" onchange="previewImage(this)">
+            </div>
+            <small class="text-muted d-block mt-2">Allowed JPG, PNG. Max size 2MB</small>
+          </div>
+        </div>
+        
+        <div class="profile-body">
+          <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="basic-tab" data-toggle="tab" href="#basic" role="tab">Basic Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="personal-tab" data-toggle="tab" href="#personal" role="tab">Personal Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="emergency-tab" data-toggle="tab" href="#emergency" role="tab">Emergency Contact</a>
+            </li>
+          </ul>
+          
+          <div class="tab-content" id="profileTabsContent">
+            <!-- Basic Information Tab -->
+            <div class="tab-pane fade show active" id="basic" role="tabpanel">
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                {% endfor %}
+              {% endif %}
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="first_name">First Name *</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                           value="{{ faculty.first_name }}" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                           value="{{ faculty.last_name }}">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" class="form-control" id="email" name="email" 
+                       value="{{ faculty.email }}" required>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control readonly-field" id="department" 
+                           value="{{ faculty.department.department_name }}" readonly>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="employee_position">Position</label>
+                    <select class="form-control" id="employee_position" name="employee_position">
+                      <option value="">Select Position</option>
+                      <option value="Hod" {% if faculty.employee_position == 'Hod' %}selected{% endif %}>Hod</option>
+                      <option value="Associate Professor" {% if faculty.employee_position == 'Associate Professor' %}selected{% endif %}>Associate Professor</option>
+                      <option value="Assistant Professor" {% if faculty.employee_position == 'Assistant Professor' %}selected{% endif %}>Assistant Professor</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" 
+                       value="{{ faculty.phone_number }}" pattern="[0-9]{10}">
+                <small class="text-muted">Format: 1234567890</small>
+              </div>
+            </div>
+            
+            <!-- Personal Details Tab -->
+            <div class="tab-pane fade" id="personal" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
+                           value="{{ faculty.date_of_birth|date:'Y-m-d' }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" id="gender" name="gender">
+                      <option value="">Select Gender</option>
+                      <option value="Male" {% if faculty.gender == 'Male' %}selected{% endif %}>Male</option>
+                      <option value="Female" {% if faculty.gender == 'Female' %}selected{% endif %}>Female</option>
+                      <option value="Other" {% if faculty.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="nationality">Nationality</label>
+                    <input type="text" class="form-control" id="nationality" name="nationality" 
+                           value="{{ faculty.nationality }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="blood_group">Blood Group</label>
+                    <input type="text" class="form-control" id="blood_group" name="blood_group" 
+                           value="{{ faculty.blood_group }}" placeholder="e.g. O+">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="address">Address</label>
+                <textarea class="form-control" id="address" name="address" rows="3">{{ faculty.address }}</textarea>
+              </div>
+            </div>
+            
+            <!-- Emergency Contact Tab -->
+            <div class="tab-pane fade" id="emergency" role="tabpanel">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="emergency_name">Emergency Contact Name</label>
+                    <input type="text" class="form-control" id="emergency_name" name="emergency_name" 
+                           value="{{ faculty.emergency_name }}">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="emergency_contact">Emergency Contact Number</label>
+                    <input type="tel" class="form-control" id="emergency_contact" name="emergency_contact" 
+                           value="{{ faculty.emergency_contact }}" pattern="[0-9]{10}">
+                    <small class="text-muted">Format: 1234567890</small>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="emergency_relation">Relationship</label>
+                <input type="text" class="form-control" id="emergency_relation" name="emergency_relation" 
+                       value="{{ faculty.emergency_relation }}" placeholder="e.g. Father, Mother, Spouse">
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-4">
+            <button type="submit" class="btn-save">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="{% static 'js/vendor.bundle.base.js' %}"></script>
+  <script>
+    function previewImage(input) {
+      if (input.files && input.files[0]) {
+        var file = input.files[0];
+        
+        // Check file size (max 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          alert('File size exceeds 2MB limit. Please choose a smaller file.');
+          input.value = '';
+          return;
+        }
+        
+        // Check file type
+        var validTypes = ['image/jpeg', 'image/png'];
+        if (!validTypes.includes(file.type)) {
+          alert('Only JPG and PNG files are allowed.');
+          input.value = '';
+          return;
+        }
+        
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('profile-preview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+    
+    // Initialize tabs
+    $(document).ready(function() {
+      $('#profileTabs a').on('click', function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+      });
+      
+      // Show filename when file is selected
+      document.getElementById('profile_picture').addEventListener('change', function(e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+        var nextSibling = e.target.previousElementSibling;
+        nextSibling.textContent = fileName;
+      });
+    });
+  </script>
+</body>
+</html>

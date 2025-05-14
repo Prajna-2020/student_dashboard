@@ -1,0 +1,556 @@
+<!--creating enrollment-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Admin Portal</title>
+  
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{%static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{%static 'css/vendor.bundle.base.css' %}">
+  <!-- endinject -->
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+  
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{%static 'css/style.css' %}">
+  <!-- endinject -->
+  
+  <link rel="shortcut icon" href="{%static 'images/ajiet_logo.png' %}"/>
+  
+  <style>
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+      margin: 0 10px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: #0d6efd;
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    .manual-date {
+      display: none;
+    }
+    .manual-date.active {
+      display: block;
+    }
+    .select-all-container {
+      margin-bottom: 10px;
+    }
+    .content-wrapper {
+      padding-top: 20px;
+    }
+    .profile-pic-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f5f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 18px;
+}
+/* For username text styling */
+.d-flex.align-items-center span {
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Sidebar Styling */
+.sidebar {
+      background: rgb(255, 255, 255) !important; /* Navy Blue color */
+      color: rgb(255, 255, 255) !important;
+    }
+    
+    .sidebar .nav-item .nav-link {
+      color: rgba(146, 143, 143, 0.9) !important;
+      padding: 12px 20px !important;
+    }
+    
+    .sidebar .nav-item .nav-link:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item .nav-link i.menu-icon {
+      color: rgba(1, 42, 87, 0.8) !important;
+      margin-right: 10px;
+    }
+    
+    .sidebar .nav-item .nav-link:hover i.menu-icon {
+      color: rgb(0, 0, 0) !important;
+    }
+    
+    .sidebar .nav-item.active .nav-link {
+      background: rgba(255, 255, 255, 0.2) !important;
+      color: white !important;
+      font-weight: 500;
+      border-left: 4px solid white;
+    }
+    
+    .sidebar .nav-item.active .nav-link i.menu-icon {
+      color: white !important;
+    }
+    
+    .sidebar .nav-submenu {
+      background: rgba(0, 0, 0, 0.15) !important;
+      padding-left: 0 !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link {
+      color: rgba(255, 255, 255, 0.8) !important;
+      padding-left: 3rem !important;
+    }
+    
+    .sidebar .nav-submenu .nav-link:hover {
+      color: white !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .sidebar .menu-arrow {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet_logo.png' %}" class="mr-2" alt="logo" style="height: 70px; width: auto; max-width: 100%;"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" alt="logo" ></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+              
+        <ul class="navbar-nav mr-lg-2">
+          <!--<center>
+            <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}"><img src="{%static 'images/ajiet-logo.svg' %}" class="mr-2" alt="logo"/></a>
+          </center>!-->
+          <li class="nav-item nav-search d-none d-lg-block">
+            <img src="{%static 'images/image.png' %}" alt="Institute Name" style="height: 60px;"> 
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown mr-1">
+           
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                    <img src="{%static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                </div>
+               
+              </a>
+       
+            </div>
+          </li>
+          
+          <li class="nav-item nav-profile dropdown">
+            <span class="mr-2 d-none d-md-inline">{{ request.user }}</span>
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="profile"/>
+              {% else %}
+                <div class="profile-pic-placeholder">
+                  <i class="ti-user"></i>  <!-- Using Themify icon -->
+                </div>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="{% url 'change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                 Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'edit_admin_profile' %}">
+                <i class="ti-user text-primary"></i>
+                Edit Profile
+            </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/home/">
+              <i class="ti-home menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_by_file' %}">
+              <i class="ti-user menu-icon"></i>
+              <span class="menu-title">Add User</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add_department' %}">
+              <i class="ti-write menu-icon"></i>
+              <span class="menu-title">Departments</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'manage_schemes' %}">
+              <i class="ti-stamp menu-icon"></i>
+              <span class="menu-title">Scheme</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'manage_courses_and_schemes' %}">
+              <i class="ti-ruler-pencil menu-icon"></i>
+              <span class="menu-title">Courses</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                <i class="ti-id-badge menu-icon"></i>
+                <span class="menu-title">Enrollment</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+                <ul class="nav flex-column sub-menu">
+                    <!-- Link for Form (Manual User Creation) -->
+                    <li class="nav-item">
+                      <a class="nav-link" href="{%url 'manage_enrollments' %}">Enroll</a>
+                    </li>
+                    <!-- Link for Add by File (Bulk User Creation) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_course_enrollments' %}">Course Scheme Mapping</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+              <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                  <!-- Link for Form (Manual User Creation) -->
+                  <li class="nav-item">
+                    <a class="nav-link" href="{%url 'bulk_upload_student' %}">Add Students</a>
+                  </li>
+                  <!-- Link for Add by File (Bulk User Creation) -->
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'list_students' %}">Manage Students</a>
+                  </li>
+              </ul>
+          </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+            <i class="ti-agenda menu-icon"></i>
+            <span class="menu-title">Faculty</span>
+            <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="auth">
+            <ul class="nav flex-column sub-menu">
+                <!-- Link for Form (Manual User Creation) -->
+                <li class="nav-item">
+                  <a class="nav-link" href="{%url 'bulk_upload_faculty' %}">Add Faculty</a>
+                </li>
+                <!-- Link for Add by File (Bulk User Creation) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'list_faculty' %}">Manage Faculty</a>
+                </li>
+            </ul>
+        </div>
+    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'admin_calendar' %}">
+            <i class="ti-calendar menu-icon"></i>
+            <span class="menu-title">Admin Calendar</span>
+        </a>
+    </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h1 class="mb-4">Student Enrollmentment</h1>
+
+                  {% if messages %} {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  {% endfor %} {% endif %}
+
+                  <!-- Bulk Enrollment Section -->
+                  <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                      <h5>Bulk Enrollment</h5>
+                    </div>
+                    <div class="card-body">
+                      <form method="post">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                          <div class="col-md-3">
+                            <label class="form-label">Scheme</label>
+                            <select class="form-select" name="bulk_scheme" id="bulkScheme" required>
+                              <option value="">Select Scheme</option>
+                              {% for scheme in all_schemes %}
+                              <option value="{{ scheme.scheme_id }}">{{ scheme.scheme_name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" name="bulk_department" id="bulkDepartment" required>
+                              <option value="">Select Department</option>
+                              {% for department in all_departments %}
+                              <option value="{{ department.department_id }}">{{ department.department_name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Semester</label>
+                            <select class="form-select" name="bulk_semester" id="bulkSemester" required>
+                              <option value="">Select Semester</option>
+                              {% for i in semester_choices %}
+                              <option value="{{ i }}">Semester {{ i }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <button type="button" id="filterStudentsBtn" class="btn btn-secondary mt-4">
+                              <i class="bi bi-funnel"></i> Filter Students
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-md-3">
+                            <label class="form-label">Course</label>
+                            <select class="form-select" name="bulk_course" required>
+                              <option value="">Select Course</option>
+                              {% for course in all_courses %}
+                              <option value="{{ course.course_id }}">{{ course.course_name }} ( {{ course.course_code }} )</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Faculty</label>
+                            <select class="form-select" name="bulk_faculty">
+                              <option value="">Not Assigned</option>
+                              {% for faculty in all_faculty %}
+                              <option value="{{ faculty.faculty_id }}">{{ faculty.user.get_full_name }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-md-12">
+                            <div class="toggle-container">
+                              <span>Use current date for enrollment</span>
+                              <label class="toggle-switch">
+                                <input type="checkbox" id="dateToggle" checked />
+                                <span class="slider"></span>
+                              </label>
+                              <span>Set manual date</span>
+                            </div>
+                            <div class="manual-date" id="manualDateContainer">
+                              <label class="form-label">Enrollment Date</label>
+                              <input type="date" class="form-control" name="bulk_enrollment_date" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <div class="col-md-12">
+                            <div class="select-all-container">
+                              <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="selectAllStudents" />
+                                <label class="form-check-label" for="selectAllStudents">
+                                  Select All Students
+                                </label>
+                              </div>
+                            </div>
+                            <label class="form-label">Students</label>
+                            <select class="form-select" name="bulk_students" id="studentSelect" multiple size="8" required>
+                              {% for student in all_students %}
+                              <option value="{{ student.student_id }}" 
+                                      data-scheme="{{ student.scheme_id }}" 
+                                      data-department="{{ student.department_id }}" 
+                                      data-semester="{{ student.current_semester }}">
+                                {{ student.user.get_full_name }} - {{ student.usn }}
+                              </option>
+                              {% endfor %}
+                            </select>
+                            <small class="text-muted">Hold Ctrl/Cmd to select multiple students</small>
+                          </div>
+                        </div>
+
+                        <button type="submit" name="bulk_enroll" class="btn btn-primary">
+                          <i class="bi bi-people-fill"></i> Enroll Selected Students
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2018 <a href="https://www.templatewatch.com/" target="_blank">Templatewatch</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  
+  <script>
+    // Toggle for manual date entry
+    document.getElementById("dateToggle").addEventListener("change", function () {
+      const manualDateContainer = document.getElementById("manualDateContainer");
+      if (this.checked) {
+        manualDateContainer.classList.remove("active");
+      } else {
+        manualDateContainer.classList.add("active");
+      }
+    });
+
+    // Select All functionality
+    document.getElementById("selectAllStudents")?.addEventListener("change", function () {
+      const studentSelect = document.getElementById("studentSelect");
+      const options = studentSelect.options;
+
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].style.display !== "none") {
+          options[i].selected = this.checked;
+        }
+      }
+    });
+
+    // Filter Students functionality
+    document.getElementById("filterStudentsBtn").addEventListener("click", function () {
+      const schemeId = document.getElementById("bulkScheme").value;
+      const departmentId = document.getElementById("bulkDepartment").value;
+      const semester = document.getElementById("bulkSemester").value;
+      const studentSelect = document.getElementById("studentSelect");
+      const options = studentSelect.options;
+
+      for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+        const showOption =
+          (schemeId === "" || option.dataset.scheme === schemeId) &&
+          (departmentId === "" || option.dataset.department === departmentId) &&
+          (semester === "" || option.dataset.semester === semester);
+
+        option.style.display = showOption ? "" : "none";
+        option.selected = showOption && option.selected;
+      }
+
+      // Update select all checkbox
+      document.getElementById("selectAllStudents").checked = false;
+    });
+
+    // Delete confirmation (if needed)
+    function confirmDelete(enrollmentId) {
+      if (confirm("Are you sure you want to delete this enrollment?")) {
+        const form = document.createElement("form");
+        form.method = "POST";
+
+        const csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "csrfmiddlewaretoken";
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+  </script>
+</body>
+</html>
+

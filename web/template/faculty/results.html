@@ -1,0 +1,361 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Enter Results - AJIET Faculty Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %} "/>
+  
+  <style>
+    /* Custom CSS for results page */
+    .results-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+    }
+    
+    .header-title {
+      margin-bottom: 30px;
+      color: #333;
+    }
+    
+    .action-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    
+    .back-btn {
+      padding: 12px 25px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
+    
+    .submit-btn {
+      padding: 12px 25px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .submit-btn:hover {
+      background-color: #0069d9;
+    }
+    
+    .btn-icon {
+      margin-right: 8px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .form-control-file {
+      display: block;
+      width: 100%;
+      padding: 8px 0;
+    }
+    
+    .form-text {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    .card {
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .card-header {
+      background-color: #f8f9fa;
+      padding: 15px 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .card-body {
+      padding: 20px;
+    }
+    
+    .alert {
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+    }
+    
+    .alert-info {
+      color: #0c5460;
+      background-color: #d1ecf1;
+      border-color: #bee5eb;
+    }
+    
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 150px; height: auto;" alt="logo"/>
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 280px; height: auto;" alt="logo"/>
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <img src="{% static 'D:/New/student_portal/web/static/images/face10.png' %}" alt="profile"/>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="/profile/">
+                  <i class="ti-user text-primary"></i>
+                  Profile
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i>
+                Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'faculty_change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/fac_course/">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Courses</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_list_students' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="font-weight-bold mb-0">Enter Results - {{ course_name }}</h4>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <a href="{% url 'faculty_dashboard' %}" class="btn btn-light mb-3">
+                      <i class="ti-arrow-left"></i> Back to Dashboard
+                    </a>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card mb-4">
+            <div class="card-header">
+                <h5>Upload Results via CSV</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <strong>Instructions:</strong> 
+                    <ul>
+                        <li>Download the template below and fill in the marks</li>
+                        <li>CSV must contain columns: usn, internal_1, internal_2, internal_3 (if applicable)</li>
+                        <li>Include assignment, quiz, project marks if applicable for this course</li>
+                        <li>Max marks: Internal ({{ course.internal_total_marks }}), Assignments ({{ course.assignment_total_marks }}), Quizzes ({{ course.quiz_total_marks }}), Projects ({{ course.project_total_marks }})</li>
+                    </ul>
+                </div>
+                
+
+                <div class="form-group" id="date-group">
+                  <label for="assessment_date">Assessment Date:</label>
+                  <input type="date" name="assessment_date" id="assessment_date" class="form-control" required>
+              </div>
+
+                <form method="post" action="{% url 'upload_results_csv' course_name=course_name %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="assessment_type">Assessment Type:</label>
+                        <select name="assessment_type" id="assessment_type" class="form-control" required>
+                          <option value="">-- Select Assessment Type --</option>
+                          <option value="internal">Internal Exam</option>
+                          {% if course.assignment_count > 0 %}<option value="assignment">Assignment</option>{% endif %}
+                          {% if course.quiz_count > 0 %}<option value="quiz">Quiz</option>{% endif %}
+                          {% if course.project_count > 0 %}<option value="project">Project</option>{% endif %}
+                          <option value="external">External Exam</option>
+                      </select>
+                    </div>
+                    
+                    <div class="form-group" id="internal-number-group" style="display:none;">
+                        <label for="internal_number">Internal Number (1-{{ course.internal_count }}):</label>
+                        <input type="number" name="internal_number" id="internal_number" min="1" max="{{ course.internal_count }}" class="form-control">
+                    </div>
+                    
+                    <div class="form-group" id="assignment-number-group" style="display:none;">
+                        <label for="assignment_number">Assignment Number (1-{{ course.assignment_count }}):</label>
+                        <input type="number" name="assignment_number" id="assignment_number" min="1" max="{{ course.assignment_count }}" class="form-control">
+                    </div>
+                    
+                    <div class="form-group" id="quiz-number-group" style="display:none;">
+                        <label for="quiz_number">Quiz Number (1-{{ course.quiz_count }}):</label>
+                        <input type="number" name="quiz_number" id="quiz_number" min="1" max="{{ course.quiz_count }}" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="csv_file">CSV File:</label>
+                        <input type="file" name="csv_file" id="csv_file" accept=".csv" class="form-control-file" required>
+                        <small class="form-text text-muted">
+                            File must be in the correct format. Download the template below.
+                        </small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ti-upload"></i> Upload Results
+                    </button>
+                    <a href="{% url 'download_results_template' course_name=course_name %}" class="btn btn-secondary">
+                        <i class="ti-download"></i> Download Template
+                    </a>
+                </form>
+            </div>
+        </div>
+        
+        
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <!-- endinject -->
+  
+  <script>
+    document.getElementById('assessment_type').addEventListener('change', function() {
+        const type = this.value;
+        
+        // Hide all number fields first
+        document.getElementById('internal-number-group').style.display = 'none';
+        document.getElementById('assignment-number-group').style.display = 'none';
+        document.getElementById('quiz-number-group').style.display = 'none';
+        
+        // Show the appropriate one
+        if (type === 'internal') {
+            document.getElementById('internal-number-group').style.display = 'block';
+        } else if (type === 'assignment') {
+            document.getElementById('assignment-number-group').style.display = 'block';
+        } else if (type === 'quiz') {
+            document.getElementById('quiz-number-group').style.display = 'block';
+        }
+        // Project and External don't need number fields
+        
+        // Always show date field
+        document.getElementById('date-group').style.display = 'block';
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>AJIET Faculty Portal</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'css/vendor.bundle.base.css' %}">
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'images/favicon.png' %} "/>
+  
+  <style>
+    /* Enhanced CSS for course cards */
+    .course-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 30px;
+    }
+
+    .course-card {
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .course-card-header {
+      background-color: #3498db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .course-card-body {
+      padding: 20px;
+    }
+
+    .course-card h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .course-card a {
+      display: block;
+      text-align: center;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 5px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .attendance-link {
+      background-color: #2ecc71;
+      color: white;
+    }
+
+    .attendance-link:hover {
+      background-color: #27ae60;
+    }
+
+    .results-link {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .results-link:hover {
+      background-color: #2980b9;
+    }
+
+    /* Enhanced dashboard cards */
+    .dashboard-card {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    /* Improved tables */
+    .table-responsive {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+      margin-bottom: 0;
+    }
+
+    .table th {
+      background-color: #3498db;
+      color: white;
+      border: none;
+    }
+
+    .table td {
+      vertical-align: middle;
+    }
+
+    /* To-do list improvements */
+    .todo-list-custom li {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      transition: background-color 0.3s;
+    }
+
+    .todo-list-custom li:hover {
+      background-color: #f8f9fa;
+    }
+
+    /* Header improvements */
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Sidebar improvements */
+    .sidebar {
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Content wrapper */
+    .content-wrapper {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .home-button:hover {
+            background-color: #0069d9;
+        }
+  </style>
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- partial:partials/_navbar.html -->
+    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo mr-5" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 150px; height: auto;" alt="logo"/>
+        </a>
+        <a class="navbar-brand brand-logo-mini" href="{% url 'home' %}">
+          <img src="{% static 'images/ajiet_logo.png' %}" style="width: 280px; height: auto;" alt="logo"/>
+        </a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav mr-lg-2">
+          
+        </ul>
+        <ul class="navbar-nav navbar-nav-right">
+          <li class="nav-item dropdown mr-1">
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <img src="{% static 'images/face10.jpg' %}" alt="image" class="profile-pic">
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+              <i class="ti-bell mx-0"></i>
+              <span class="count"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-success">
+                    <i class="ti-info-alt mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Application Error</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Just now
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-warning">
+                    <i class="ti-settings mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">Settings</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    Private message
+                  </p>
+                </div>
+              </a>
+              <a class="dropdown-item">
+                <div class="item-thumbnail">
+                  <div class="item-icon bg-info">
+                    <i class="ti-user mx-0"></i>
+                  </div>
+                </div>
+                <div class="item-content">
+                  <h6 class="font-weight-normal">New user registration</h6>
+                  <p class="font-weight-light small-text mb-0 text-muted">
+                    2 days ago
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+              <span class="mr-2 d-none d-lg-inline text-gray-600">{{ request.user.get_full_name }}</span>
+              {% if request.user.faculty.profile_picture %}
+              <img src="{{ request.user.faculty.profile_picture.url }}" alt="Profile" class="rounded-circle" width="32">
+              {% else %}
+              <i class="ti-user"></i>
+              {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="/profile/">
+                <i class="ti-user text-primary"></i> Profile
+              </a>
+              <a class="dropdown-item" href="/signout/">
+                <i class="ti-power-off text-primary"></i> Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'faculty_change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
+              </a>
+            </div>
+          </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+          <span class="ti-view-list"></span>
+        </button>
+      </div>
+    </nav>
+    <!-- partial -->
+    <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_dashboard' %}">
+              <i class="ti-shield menu-icon"></i>
+              <span class="menu-title">Dashboard</span>
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/fac_course/">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Courses</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'faculty_list_students' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">Students</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}">
+              <i class="ti-book menu-icon"></i>
+              <span class="menu-title">View Documentation</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+       
+        <div class="content-wrapper">
+          <div class="row">
+           
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    
+                  <h4 class="font-weight-bold mb-0">Your Enrolled Courses</h4>
+                  <button class="home-button" onclick="window.location.href='/dashboard/'">
+                    <i class="fas fa-home"></i> Back to Home
+                </button>
+            
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Faculty Dashboard Cards -->
+          <div class="row">
+            
+            
+            
+            
+          </div>
+          
+          <!-- Faculty Course Cards Section -->
+          <!-- Faculty Course Cards Section -->
+          <div class="row">
+            <div class="col-12">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-column flex-md-row justify-content-between align-items-center">
+                  <h6 class="m-0 font-weight-bold text-primary">Your Courses</h6>
+                  
+                </div>
+                <div class="card-body">
+                  {% if faculty_courses %}
+                  <div class="row">
+                    {% for course in faculty_courses %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                      <div class="card h-100 border-left-info">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ course.course_name }}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{ course.course_code }}</h6>
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-light text-dark">Sem {{ course.semester }}</span>
+                            <span class="badge bg-light text-dark">{{ course.credits }} Credits</span>
+                          </div>
+                          <div class="d-flex justify-content-between mt-3">
+                            <a href="{% url 'attendance' course.course_name %}" class="btn btn-sm btn-primary">
+                              <i class="fas fa-calendar-check mr-1"></i> Attendance
+                            </a>
+                            <a href="{% url 'results' course.course_name %}" class="btn btn-sm btn-success">
+                              <i class="fas fa-chart-bar mr-1"></i> Results
+                            </a>
+                          </div>
+                          <div class="d-flex justify-content-center mt-3" >
+                            <a href="{% url 'course_students' course.course_id %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-chart-bar mr-1"></i>View Students
+                            </a>
+                        </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0 pt-0">
+                          <small class="text-muted">
+                            {% with course.enrollment_set.count as enrolled %}
+                            {{ enrolled }} student{{ enrolled|pluralize }} enrolled
+                            {% endwith %}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% else %}
+                  <div class="text-center py-4">
+                    <i class="fas fa-book-open fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">You are not assigned to any courses yet</h5>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Faculty Tables Section -->
+          </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.ajiet.edu.in/" target="_blank">AJIET</a>. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+
+  <!-- plugins:js -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <script src="{%static 'js/Chart.min.js' %}"></script>
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  <script src="{%static 'js/todolist.js' %}"></script>
+  <!-- endinject -->
+  <!-- Custom js for this page-->
+  <script src="{%static 'js/dashboard.js' %}"></script>
+  <!-- End custom js for this page-->
+</body>
+</html>

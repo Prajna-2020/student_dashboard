@@ -1,0 +1,137 @@
+{% load static %}
+<form id="facultyForm" method="POST" action="{% url 'edit_faculty' faculty.faculty_id %}" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <div class="row">
+    <!-- Personal Details -->
+    <div class="col-md-6">
+      <h4>Personal Details</h4>
+      <div class="form-group">
+        <label>Profile Picture</label>
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="profile_picture" name="profile_picture">
+          <label class="custom-file-label" for="profile_picture">
+            {% if faculty.profile_picture %}
+              Current: {{ faculty.profile_picture.name|slice:"17:" }}
+            {% else %}
+              Choose file
+            {% endif %}
+          </label>
+        </div>
+        {% if faculty.profile_picture %}
+          <img src="{{ faculty.profile_picture.url }}" alt="Current Profile" class="img-thumbnail mt-2" width="100">
+        {% endif %}
+      </div>
+      
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ faculty.first_name }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ faculty.last_name }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{ faculty.email }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="phone_number">Phone Number</label>
+        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ faculty.phone_number|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="date_of_birth">Date of Birth</label>
+        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ faculty.date_of_birth|date:'Y-m-d' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select class="form-control" id="gender" name="gender">
+          <option value="">Select Gender</option>
+          <option value="Male" {% if faculty.gender == 'Male' %}selected{% endif %}>Male</option>
+          <option value="Female" {% if faculty.gender == 'Female' %}selected{% endif %}>Female</option>
+          <option value="Other" {% if faculty.gender == 'Other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Professional Details -->
+    <div class="col-md-6">
+      <h4>Professional Details</h4>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select class="form-control" id="department" name="department" required>
+          {% for dept in departments %}
+            <option value="{{ dept.department_id }}" {% if dept.department_id == faculty.department.department_id %}selected{% endif %}>
+              {{ dept.department_name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="employee_position">Position</label>
+        <select class="form-control" id="employee_position" name="employee_position">
+          <option value="">Select Position</option>
+          <option value="Hod" {% if faculty.employee_position == 'Hod' %}selected{% endif %}>HOD</option>
+          <option value="Associate Professor" {% if faculty.employee_position == 'Associate Professor' %}selected{% endif %}>Associate Professor</option>
+          <option value="Assistant Professor" {% if faculty.employee_position == 'Assistant Professor' %}selected{% endif %}>Assistant Professor</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="nationality">Nationality</label>
+        <input type="text" class="form-control" id="nationality" name="nationality" value="{{ faculty.nationality|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="blood_group">Blood Group</label>
+        <input type="text" class="form-control" id="blood_group" name="blood_group" value="{{ faculty.blood_group|default:'' }}">
+      </div>
+      
+      <h4 class="mt-4">Emergency Contact</h4>
+      <div class="form-group">
+        <label for="emergency_name">Emergency Contact Name</label>
+        <input type="text" class="form-control" id="emergency_name" name="emergency_name" value="{{ faculty.emergency_name|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="emergency_contact">Emergency Contact Number</label>
+        <input type="text" class="form-control" id="emergency_contact" name="emergency_contact" value="{{ faculty.emergency_contact|default:'' }}">
+      </div>
+      
+      <div class="form-group">
+        <label for="emergency_relation">Relationship</label>
+        <input type="text" class="form-control" id="emergency_relation" name="emergency_relation" value="{{ faculty.emergency_relation|default:'' }}">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Address Details -->
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <h4>Address Details</h4>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <textarea class="form-control" id="address" name="address" rows="3">{{ faculty.address|default:'' }}</textarea>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </div>
+</form>
+
+<script>
+  // Update file input label
+  $('.custom-file-input').on('change', function() {
+    let fileName = $(this).val().split('\\').pop();
+    $(this).next('.custom-file-label').addClass("selected").html(fileName);
+  });
+</script>
