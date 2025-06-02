@@ -743,7 +743,7 @@ def update_all_results(request):
             else:
                 messages.warning(request, f"Results stored but semester not updated - you have {failed_courses} backlogs (maximum 4 allowed)")
         else:
-            messages.info(request, "Results stored but semester not updated - current semester doesn't match enrolled courses")
+            messages.info(request, "Results are up to date")
     
     except (Student.DoesNotExist, AttributeError) as e:
         messages.error(request, "Error updating semester information")

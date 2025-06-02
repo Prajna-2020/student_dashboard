@@ -268,66 +268,26 @@
               </a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-              <i class="ti-bell mx-0"></i>
-              <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-              <a class="dropdown-item">
-                <div class="item-thumbnail">
-                  <div class="item-icon bg-success">
-                    <i class="ti-info-alt mx-0"></i>
-                  </div>
-                </div>
-                <div class="item-content">
-                  <h6 class="font-weight-normal">Application Error</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    Just now
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item">
-                <div class="item-thumbnail">
-                  <div class="item-icon bg-warning">
-                    <i class="ti-settings mx-0"></i>
-                  </div>
-                </div>
-                <div class="item-content">
-                  <h6 class="font-weight-normal">Settings</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    Private message
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item">
-                <div class="item-thumbnail">
-                  <div class="item-icon bg-info">
-                    <i class="ti-user mx-0"></i>
-                  </div>
-                </div>
-                <div class="item-content">
-                  <h6 class="font-weight-normal">New user registration</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    2 days ago
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li>
+          
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="{% static 'images/ajiet.jpg' %}" alt="Profile" class="rounded-circle" width="150">
+              <span class="mr-2 d-none d-lg-inline text-gray-600">{{ request.user.get_full_name }}</span>
+              {% if request.user.faculty.profile_picture %}
+              <img src="{{ request.user.faculty.profile_picture.url }}" alt="Profile" class="rounded-circle" width="32">
+              {% else %}
+              <i class="ti-user"></i>
+              {% endif %}
             </a>
-              <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                <a class="dropdown-item" href="/profile/">
-                    <i class="ti-user text-primary"></i>
-                    Profile
-                </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+              <a class="dropdown-item" href="/profile/">
+                <i class="ti-user text-primary"></i> Profile
+              </a>
               <a class="dropdown-item" href="/signout/">
-                <i class="ti-power-off text-primary"></i>
-                Logout
+                <i class="ti-power-off text-primary"></i> Logout
+              </a>
+              <a class="dropdown-item" href="{% url 'faculty_change_password' %}">
+                <i class="ti-settings text-primary"></i>
+                Change Password
               </a>
             </div>
           </li>
@@ -361,13 +321,6 @@
             <a class="nav-link" href="{% url 'faculty_list_students' %}">
               <i class="ti-book menu-icon"></i>
               <span class="menu-title">Students</span>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">
-              <i class="ti-book menu-icon"></i>
-              <span class="menu-title">View Documentation</span>
             </a>
           </li>
         </ul>
@@ -513,6 +466,11 @@
  <!-- Existing scripts -->
  <!-- Add Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+ <!-- JavaScript -->
+  <script src="{%static 'js/vendor.bundle.base.js' %}"></script>
+  <script src="{%static 'js/off-canvas.js' %}"></script>
+  <script src="{%static 'js/hoverable-collapse.js' %}"></script>
+  <script src="{%static 'js/template.js' %}"></script>
+  
 </body>
 </html>

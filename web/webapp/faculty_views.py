@@ -527,7 +527,7 @@ def post_announcement(request):
             course=course,
             faculty=request.user.faculty
         )
-        return redirect('faculty_home')
+        return redirect('post_announcement')
         
     # Get courses taught by the faculty
     courses = Course.objects.filter(enrollment__faculty=request.user.faculty).distinct()
